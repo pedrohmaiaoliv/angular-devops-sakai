@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Pet } from '../../../../demo/api/pet.model';
+import { Pet } from '../../../api/pet.model';
 import { MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { PetService } from '../../../../demo/service/pet.service';
+import { PetService } from '../../../service/pet.service';
 
 @Component({
-    templateUrl: './crud.component.html',
+    templateUrl: './pets.component.html',
     providers: [MessageService]
 })
-export class CrudComponent implements OnInit {
+export class PetsComponent implements OnInit {
 
     petDialog: boolean = false;
 
