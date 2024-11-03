@@ -853,6 +853,8 @@ p-chips.p-chips-clearable .p-chips-clear-icon {
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
   box-shadow: none;
+  max-height: 150px; /* Ajuste a altura conforme necessário */
+  overflow-y: auto; /* Adiciona uma barra de rolagem ao dropdown */
 }
 .p-dropdown-panel .p-dropdown-header {
   padding: 0.75rem 1.5rem;

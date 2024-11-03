@@ -1,0 +1,114 @@
+<!-- src/app/demo/pages/tutors/tutors.component.html -->
+<div class="grid">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar>
+                <ng-template pTemplate="left">
+                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedTutors()" [disabled]="!selectedTutors || !selectedTutors.length"></button>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table [value]="tutors" [paginator]="true" [rows]="10" [rowsPerPageOptions]="rowsPerPageOptions" [selection]="selectedTutors" (selectionChange)="selectedTutors = $event">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+                        <th pSortableColumn="telefone">Telefone <p-sortIcon field="telefone"></p-sortIcon></th>
+                        <th pSortableColumn="cidade">Cidade <p-sortIcon field="cidade"></p-sortIcon></th>
+                        <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
+                        <th pSortableColumn="sexo">Sexo <p-sortIcon field="sexo"></p-sortIcon></th>
+                        <th>Actions</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-tutor>
+                    <tr>
+                        <td><p-tableCheckbox [value]="tutor"></p-tableCheckbox></td>
+                        <td>{{ tutor.nome }}</td>
+                        <td>{{ tutor.telefone }}</td>
+                        <td>{{ tutor.cidade }}</td>
+                        <td>{{ tutor.estado }}</td>
+                        <td>{{ tutor.sexo }}</td>
+                        <td>
+                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editTutor(tutor)"></button>
+                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTutor(tutor)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-dialog [(visible)]="tutorDialog" [style]="{width: '450px'}" header="Tutor Details" [modal]="true" class="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="field">
+                        <label for="nome">Nome</label>
+                        <input type="text" pInputText id="nome" [(ngModel)]="tutor.nome" required />
+                    </div>
+                    <div class="field">
+                        <label for="rua">Rua</label>
+                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" />
+                    </div>
+                    <div class="field">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" />
+                    </div>
+                    <div class="field">
+                        <label for="numero">Número</label>
+                        <input type="number" pInputText id="numero" [(ngModel)]="tutor.numero" />
+                    </div>
+                    <div class="field">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" pInputText id="cidade" [(ngModel)]="tutor.cidade" />
+                    </div>
+                    <div class="field">
+                        <label for="cep">CEP</label>
+                        <input type="text" pInputText id="cep" [(ngModel)]="tutor.cep" />
+                    </div>
+                    <div class="field">
+                        <label for="estado">Estado</label>
+                        <input type="text" pInputText id="estado" [(ngModel)]="tutor.estado" />
+                    </div>
+                    <div class="field">
+                        <label for="telefone">Telefone</label>
+                        <input type="text" pInputText id="telefone" [(ngModel)]="tutor.telefone" />
+                    </div>
+                    <div class="field">
+                        <label for="cpf">CPF</label>
+                        <input type="text" pInputText id="cpf" [(ngModel)]="tutor.cpf" placeholder="000.000.000-00" mask="000.000.000-00" />
+                    </div>
+                    <div class="field">
+                        <label for="sexo">Sexo</label>
+                        <p-dropdown [options]="[{label:'Masculino', value:'Masculino'}, {label:'Feminino', value:'Feminino'}, {label:'Outro', value:'Outro'}]" [(ngModel)]="tutor.sexo" placeholder="Selecione o sexo"></p-dropdown>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                    <button pButton label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTutor()"></button>
+                </ng-template>
+            </p-dialog>
+            <p-dialog [(visible)]="deleteTutorDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>Are you sure you want to delete <b>{{ tutor.nome }}</b>?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteTutorDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+                </ng-template>
+            </p-dialog>
+
+            <!-- Diálogo de confirmação para deletar múltiplos tutores -->
+            <p-dialog [(visible)]="deleteTutorsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>Are you sure you want to delete selected tutors?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteTutorsDialog = false"></button>
+                    <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+                </ng-template>
+            </p-dialog>
+        </div>
+    </div>
+</div>

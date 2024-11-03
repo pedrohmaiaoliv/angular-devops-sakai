@@ -4,29 +4,27 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Pet } from '../api/pet.model';
 
-
-
-
 @Injectable({
     providedIn: 'root'
-
 })
-
 export class PetService {
-
-    private basePath = 'products';
+    private basePath = 'pets';
 
     constructor(private db: AngularFireDatabase) { }
 
-    
     createPet(pet: Pet): void {
-        this.db.list<Pet>(this.basePath).push(pet);
+        const petToSave = { ...pet };
+        // Converte dataNascimento para string no formato yyyy-MM-dd, se existir
+        if (petToSave.dataNascimento instanceof Date) {
+            petToSave.dataNascimento = petToSave.dataNascimento.toISOString().split('T')[0];
+        }
+        this.db.list<Pet>(this.basePath).push(petToSave);
     }
 
-    getPets() {
+    getPets(): Observable<Pet[]> {
         return this.db.list<Pet>(this.basePath).snapshotChanges().pipe(
-            map(changes =>
-                changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))
+            map(changes => 
+                changes.map(c => ({ key: c.payload.key, ...c.payload.val() } as Pet))
             )
         );
     }
@@ -35,12 +33,16 @@ export class PetService {
         return this.db.object<Pet>(`${this.basePath}/${key}`).valueChanges();
     }
 
-    updatePet(key: string, value: any): Promise<void> { 
-        return this.db.object<Pet>(`${this.basePath}/${key}`).update(value);
+    updatePet(key: string, pet: Pet): Promise<void> {
+        const petToUpdate = { ...pet };
+        // Converte dataNascimento para string no formato yyyy-MM-dd, se existir
+        if (petToUpdate.dataNascimento instanceof Date) {
+            petToUpdate.dataNascimento = petToUpdate.dataNascimento.toISOString().split('T')[0];
+        }
+        return this.db.object<Pet>(`${this.basePath}/${key}`).update(petToUpdate);
     }
+
     deletePet(key: string): Promise<void> {
         return this.db.object<Pet>(`${this.basePath}/${key}`).remove();
     }
-
 }
-

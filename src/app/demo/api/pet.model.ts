@@ -5,14 +5,14 @@ interface InventoryStatus{
 
 export interface Pet {
     id?: string;
-    key?:string;
     code?: string;
-    name?: string;
-    description?: string;
-    price?: number;
-    quantity?: number;
-    inventoryStatus?: InventoryStatus;
-    category?: string;
-    image?: string;
-    rating?: number;
+    key?: string;
+    nome?: string;
+    idade?: number;
+    dataNascimento?: Date | String;
+    especie?: string;
+    peso?: number;
+    cor?: string;
+    sexo?: 'Masculino' | 'Feminino' | 'Outro';
 }
+

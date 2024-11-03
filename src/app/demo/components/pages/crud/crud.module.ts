@@ -5,6 +5,7 @@ import { CrudRoutingModule } from './crud-routing.module';
 import { CrudComponent } from './crud.component';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
+import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
@@ -20,6 +21,7 @@ import { DialogModule } from 'primeng/dialog';
 @NgModule({
     imports: [
         CommonModule,
+        CalendarModule,
         CrudRoutingModule,
         TableModule,
         FileUploadModule,

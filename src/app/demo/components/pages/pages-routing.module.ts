@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 @NgModule({
     imports: [RouterModule.forChild([
         { path: 'crud', loadChildren: () => import('./crud/crud.module').then(m => m.CrudModule) },
-        { path: 'pets', loadChildren: () => import('./pets/pets.module').then(m => m.PetsModule) },
+        { path: 'tutors', loadChildren: () => import('./tutors/tutors.module').then(m => m.TutorsModule) },
         { path: 'empty', loadChildren: () => import('./empty/emptydemo.module').then(m => m.EmptyDemoModule) },
         { path: 'timeline', loadChildren: () => import('./timeline/timelinedemo.module').then(m => m.TimelineDemoModule) },
         { path: '**', redirectTo: '/notfound' }

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { PetsRoutingModule } from './pets-routing.module';
-import { PetsComponent } from './pets.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'; // Adiciona ReactiveFormsModule
+import { TutorsRoutingModule } from './tutors-routing.module'; // Corrigido para TutorsRoutingModule
+import { TutorsComponent } from './tutors.component'; // Corrigido para TutorsComponent
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
@@ -16,15 +16,18 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @NgModule({
     imports: [
         CommonModule,
-        PetsRoutingModule,
+        TutorsRoutingModule, // Corrigido para TutorsRoutingModule
         TableModule,
         FileUploadModule,
         FormsModule,
+        ReactiveFormsModule, // Adicionado para suporte a formulários reativos
         ButtonModule,
+        NgxMaskDirective,
         RippleModule,
         ToastModule,
         ToolbarModule,
@@ -36,6 +39,7 @@ import { DialogModule } from 'primeng/dialog';
         InputNumberModule,
         DialogModule
     ],
-    declarations: [PetsComponent]
+    declarations: [TutorsComponent], // Corrigido para TutorsComponent
+    providers: [provideNgxMask()],
 })
-export class PetsModule { }
+export class TutorsModule { }
