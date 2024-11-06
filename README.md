@@ -1,27 +1,42 @@
-# Sakai
+# Petshop CRUD
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.0.4.
+Este projeto foi criado como parte de uma atividade prática para aprendizado de sistemas legados e frameworks JavaScript. Ele utiliza o Angular para desenvolver uma aplicação CRUD com o Firebase como banco de dados e recursos de integração com a API ViaCEP e IBGE para preenchimento de endereços automaticamente. A aplicação possui uma tela de login e permite o cadastro de pets, tutores e serviços de um pet shop.
 
-## Development server
+## Servidor de Desenvolvimento
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Para iniciar o servidor de desenvolvimento, execute o seguinte comando:
 
-## Code scaffolding
+```bash
+[npm start]
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Funcionalidades Principais
 
-## Build
+- **Cadastro e Gerenciamento de Pets, Tutores e Serviços:** Inclui validações de campos e uso de máscaras.
+- **Busca Automática de Endereço pelo CEP:** Integração com a API ViaCEP para preenchimento automático dos campos de endereço. Caso o CEP não seja encontrado, é possível inserir as informações manualmente.
+- **Listagem Dinâmica de Estados e Municípios:** Integração com a API do IBGE para seleção de estado e município, exibindo os municípios correspondentes ao estado escolhido.
+- **Sistema de Login Simples:** Inclui uma tela inicial de login, com autenticação simulada usando variáveis e condicionais.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Instalação
 
-## Running unit tests
+Para instalar as dependências e configurar o ambiente, siga estas etapas:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+[npm install]
+```
 
-## Running end-to-end tests
+## Comandos Úteis
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```bash
+[npm install firebase @angular/fire@16.0.0]
+```
 
-## Further help
+## Versionamento e Deploy
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Este projeto segue as boas práticas de versionamento no Git, com as seguintes branches principais:
+
+- **main:** Branch de produção.
+- **staging:** Branch de teste antes do deploy para produção.
+- **develop:** Branch de desenvolvimento, onde novas funcionalidades são testadas.
+
+O projeto está hospedado na Vercel com deploys automáticos configurados a partir da integração com o GitHub. Para visualizar o projeto online, acesse o link disponível no repositório.
