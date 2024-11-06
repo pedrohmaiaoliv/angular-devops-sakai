@@ -74,20 +74,53 @@ export class CrudComponent implements OnInit {
 
     savePet() {
         this.submitted = true;
-        if (this.pet.nome?.trim()) {
-            if (this.pet.key) {
-                // Atualiza pet existente
-                this.petService.updatePet(this.pet.key, this.pet).then(() => {
-                    this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Updated', life: 3000 });
-                });
-            } else {
-                // Cria novo pet
-                this.petService.createPet(this.pet);
-                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Created', life: 3000 });
-            }
-            this.petDialog = false;
-            this.pet = {};
+    
+        // Verifica se todos os campos obrigatórios estão preenchidos
+        if (!this.pet.nome?.trim()) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Nome não preenchido.', life: 3000 });
+            return;
         }
+        if (!this.pet.especie) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Espécie não preenchido.', life: 3000 });
+            return;
+        }
+        if (!this.pet.idade || this.pet.idade <= 0) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Idade não preenchido ou inválido.', life: 3000 });
+            return;
+        }
+        if (!this.pet.dataNascimento) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Data de Nascimento não preenchido.', life: 3000 });
+            return;
+        }
+        if (!this.pet.peso || this.pet.peso <= 0) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Peso não preenchido ou inválido.', life: 3000 });
+            return;
+        }
+        if (!this.pet.sexo) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Sexo não preenchido.', life: 3000 });
+            return;
+        }
+        if (!this.pet.cor?.trim()) {
+            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Cor não preenchido.', life: 3000 });
+            return;
+        }
+    
+        // Se todas as validações passarem, continua com a criação ou atualização do pet
+        if (this.pet.key) {
+            // Atualiza pet existente
+            this.petService.updatePet(this.pet.key, this.pet).then(() => {
+                this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Updated', life: 3000 });
+            });
+        } else {
+            // Cria novo pet
+            this.petService.createPet(this.pet);
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Created', life: 3000 });
+        }
+    
+        // Fecha o diálogo e redefine o objeto pet e submitted
+        this.petDialog = false;
+        this.pet = {};
+        this.submitted = false;
     }
 
     onGlobalFilter(table: Table, event: Event) {
