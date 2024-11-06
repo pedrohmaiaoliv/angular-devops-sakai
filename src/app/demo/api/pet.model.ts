@@ -13,6 +13,6 @@ export interface Pet {
     especie?: string;
     peso?: number;
     cor?: string;
-    sexo?: 'Masculino' | 'Feminino' | 'Outro';
+    sexo?: 'Macho' | 'Femea' | 'Outro';
 }
 

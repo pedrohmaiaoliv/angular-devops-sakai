@@ -27,7 +27,7 @@
                         <th pSortableColumn="peso">Peso <p-sortIcon field="peso"></p-sortIcon></th>
                         <th pSortableColumn="sexo">Sexo <p-sortIcon field="sexo"></p-sortIcon></th>
                         <th pSortableColumn="cor">Cor <p-sortIcon field="cor"></p-sortIcon></th>
-                        <th>Actions</th>
+                        <th>Ações</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-pet>
@@ -44,10 +44,19 @@
                         <td>{{ pet.sexo }}</td>
                         <td>{{ pet.cor }}</td>
                         
+                        <!--
                         <td>
                             <button pButton pRipple icon="pi pi-pencil" (click)="editPet(pet)"></button>
                             <button pButton pRipple icon="pi pi-trash" (click)="deletePet(pet)"></button>
                         </td>
+                        -->
+
+                        <td>
+                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPet(pet)"></button>
+                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="editPet(pet)"></button>
+                        </td>
+
+
                     </tr>
                 </ng-template>
             </p-table>
@@ -58,22 +67,28 @@
 
             <ng-template pTemplate="content">
                 <img [src]="'assets/demo/images/product/' + pet.image" [alt]="pet.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="pet.image">
+                
+                <!-- Nome -->
                 <div class="field">
                     <label for="nome">Nome</label>
                     <input type="text" pInputText id="nome" [(ngModel)]="pet.nome" required autofocus 
                            [ngClass]="{'ng-invalid ng-dirty' : submitted && !pet.nome}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !pet.nome">Nome é obrigatório.</small>
                 </div>
+
+                <!-- Idade -->
                 <div class="field">
                     <label for="idade">Idade</label>
                     <input type="number" pInputText id="idade" [(ngModel)]="pet.idade" required />
                 </div>
+
+                <!-- Data nascimento -->
                 <div class="field">
                     <label for="dataNascimento">Data de Nascimento</label>
                     <p-calendar id="dataNascimento" [(ngModel)]="pet.dataNascimento" dateFormat="dd/mm/yy"></p-calendar>
                 </div>
                 
-
+                <!-- Especie -->
                 <div class="field">
                     <label class="mb-3">Especie</label>
                     <div class="formgrid grid">
@@ -96,14 +111,19 @@
                     </div>
                 </div>
 
+                <!-- Peso -->
                 <div class="field">
                     <label for="peso">Peso (kg)</label>
                     <input type="number" pInputText id="peso" [(ngModel)]="pet.peso" required />
                 </div>
+
+                <!-- Sexo -->
                 <div class="field">
                     <label for="sexo">Sexo</label>
-                    <p-dropdown [(ngModel)]="pet.sexo" [options]="[{label:'Masculino', value:'Masculino'}, {label:'Feminino', value:'Feminino'}, {label:'Outro', value:'Outro'}]" placeholder="Selecione o sexo"></p-dropdown>
+                    <p-dropdown [(ngModel)]="pet.sexo" [options]="[{label:'Macho', value:'Macho'}, {label:'Fêmea', value:'Femea'}, {label:'Outro', value:'Outro'}]" placeholder="Selecione o sexo"></p-dropdown>
                 </div>
+
+                <!-- Cor -->
                 <div class="field">
                     <label for="cor">Cor</label>
                     <input type="text" pInputText id="cor" [(ngModel)]="pet.cor" required 
