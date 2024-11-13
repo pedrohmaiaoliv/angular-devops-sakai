@@ -1,4 +1,5 @@
-const fs = required ('fs');
+require('dotenv').config();
+const fs = require ('fs');
 
 const envConfigFile = `
 export const environment = {
@@ -18,3 +19,5 @@ export const environment = {
 fs.writeFileSync('./src/environments/environment.prod.ts', envConfigFile);
 fs.writeFileSync('./src/environments/environment.ts', envConfigFile);
 console.log('Wrote environment variables to environment.prod.ts and environment.ts');
+
+

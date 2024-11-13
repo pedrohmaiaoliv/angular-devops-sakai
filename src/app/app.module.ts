@@ -29,7 +29,7 @@ registerLocaleData(ptBr);
     imports: [
         AppRoutingModule,
         AppLayoutModule,
-        AngularFireModule.initializeApp(environment.firebaseConfig),
+        AngularFireModule.initializeApp(environment.firebase),
         AngularFireDatabaseModule,
         CalendarModule // Adicione o CalendarModule aqui
     ],

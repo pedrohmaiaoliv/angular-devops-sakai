@@ -29,6 +29,7 @@
         "@fullcalendar/interaction": "^6.0.3",
         "@fullcalendar/timegrid": "^6.0.3",
         "chart.js": "^3.3.2",
+        "dotenv": "^16.0.0",
         "firebase": "^10.14.1",
         "ngx-mask": "^16.0.0",
         "primeflex": "^3.3.1",
