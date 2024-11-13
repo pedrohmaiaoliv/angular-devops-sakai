@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, registerLocaleData } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppLayoutModule } from './layout/app.layout.module';
@@ -15,21 +15,44 @@ import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireDatabaseModule } from '@angular/fire/compat/database';
 import { environment } from '../environments/environment';
 
+import { CalendarModule } from 'primeng/calendar';
+import { PrimeNGConfig } from 'primeng/api';
+import ptBr from '@angular/common/locales/pt';
+
+registerLocaleData(ptBr);
+
 @NgModule({
     declarations: [
-        AppComponent, NotfoundComponent
+        AppComponent, 
+        NotfoundComponent
     ],
     imports: [
         AppRoutingModule,
         AppLayoutModule,
         AngularFireModule.initializeApp(environment.firebaseConfig),
-        AngularFireDatabaseModule
+        AngularFireDatabaseModule,
+        CalendarModule // Adicione o CalendarModule aqui
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService
+        PhotoService, ProductService,
+        PrimeNGConfig // Adicione o PrimeNGConfig aqui
     ],
     bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+    constructor(private primengConfig: PrimeNGConfig) {
+        this.primengConfig.setTranslation({
+            accept: 'Aceitar',
+            reject: 'Rejeitar',
+            dayNames: ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"],
+            dayNamesShort: ["dom", "seg", "ter", "qua", "qui", "sex", "sáb"],
+            dayNamesMin: ["D", "S", "T", "Q", "Q", "S", "S"],
+            monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+            monthNamesShort: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
+            today: 'Hoje',
+            clear: 'Limpar'
+        });
+    }
+}

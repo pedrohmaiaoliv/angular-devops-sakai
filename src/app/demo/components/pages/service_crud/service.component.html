@@ -3,8 +3,8 @@
       <div class="card">
         <p-toolbar>
           <ng-template pTemplate="left">
-            <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-            <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedServices()" [disabled]="!selectedServices || !selectedServices.length"></button>
+            <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+            <button pButton pRipple label="Apagar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedServices()" [disabled]="!selectedServices || !selectedServices.length"></button>
           </ng-template>
         </p-toolbar>
   
@@ -65,7 +65,7 @@
         <p-dialog [(visible)]="deleteServiceDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete <b>{{ service.nome }}</b>?</span>
+                <span>Tem certeza que deseja apagar? <b>{{ service.nome }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteServiceDialog = false"></button>
@@ -77,7 +77,7 @@
         <p-dialog [(visible)]="deleteServicesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected services?</span>
+                <span>Tem certeza que quer apagar os serviços selecionados?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteServicesDialog = false"></button>

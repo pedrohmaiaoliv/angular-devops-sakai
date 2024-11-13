@@ -5,25 +5,31 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedPets()" [disabled]="!selectedPets || !selectedPets.length"></button>
+                        <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2"
+                            (click)="openNew()"></button>
+                        <button pButton pRipple label="Apagar" icon="pi pi-trash" class="p-button-danger"
+                            (click)="deleteSelectedPets()" [disabled]="!selectedPets || !selectedPets.length"></button>
                     </div>
                 </ng-template>
 
-                <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
-                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
-                </ng-template>
+                <!-- <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"
+                        chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"
+                        (click)="dt.exportCSV()"></button>
+                </ng-template> -->
             </p-toolbar>
 
-            <p-table #dt [value]="pets" responsiveLayout="scroll" [rows]="10" [paginator]="true" [(selection)]="selectedPets" selectionMode="multiple" dataKey="key">
+            <p-table #dt [value]="pets" responsiveLayout="scroll" [rows]="10" [paginator]="true"
+                [(selection)]="selectedPets" selectionMode="multiple" dataKey="key">
                 <ng-template pTemplate="header">
                     <tr>
                         <th><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
                         <th pSortableColumn="nome">Nome do Pet <p-sortIcon field="nome"></p-sortIcon></th>
                         <th pSortableColumn="especie">Espécie <p-sortIcon field="especie"></p-sortIcon></th>
                         <th pSortableColumn="idade">Idade <p-sortIcon field="idade"></p-sortIcon></th>
-                        <th pSortableColumn="dataNascimento">Data de Nascimento <p-sortIcon field="dataNascimento"></p-sortIcon></th>
+                        <th pSortableColumn="dataNascimento">Data de Nascimento <p-sortIcon
+                                field="dataNascimento"></p-sortIcon></th>
                         <th pSortableColumn="peso">Peso <p-sortIcon field="peso"></p-sortIcon></th>
                         <th pSortableColumn="sexo">Sexo <p-sortIcon field="sexo"></p-sortIcon></th>
                         <th pSortableColumn="cor">Cor <p-sortIcon field="cor"></p-sortIcon></th>
@@ -44,24 +50,28 @@
                         <td>{{ pet.sexo }}</td>
                         <td>{{ pet.cor }}</td>
                         <td>
-                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPet(pet)"></button>
-                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletePet(pet)"></button>
+                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+                                (click)="editPet(pet)"></button>
+                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                                (click)="deletePet(pet)"></button>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
-            
+
         </div>
 
-        <p-dialog [(visible)]="petDialog" [style]="{width: '450px', maxHeight: '70vh'}" header="Pet Details" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="petDialog" [style]="{width: '450px', maxHeight: '70vh'}" header="Pet Details"
+            [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
-                <img [src]="'assets/demo/images/product/' + pet.image" [alt]="pet.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="pet.image">
-                
+                <img [src]="'assets/demo/images/product/' + pet.image" [alt]="pet.image" width="150"
+                    class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="pet.image">
+
                 <!-- Nome -->
                 <div class="field">
                     <label for="nome">Nome</label>
-                    <input type="text" pInputText id="nome" [(ngModel)]="pet.nome" required autofocus 
-                           [ngClass]="{'ng-invalid ng-dirty' : submitted && !pet.nome}"/>
+                    <input type="text" pInputText id="nome" [(ngModel)]="pet.nome" required autofocus
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && !pet.nome}" />
                     <small class="p-error" *ngIf="submitted && !pet.nome">Campo Nome não preenchido.</small>
                 </div>
 
@@ -69,14 +79,24 @@
                 <div class="field">
                     <label for="idade">Idade</label>
                     <input type="number" pInputText id="idade" [(ngModel)]="pet.idade" required min="0" max="25" />
-                    <small class="p-error" *ngIf="submitted && (!pet.idade || pet.idade < 0)">Campo Idade não preenchido ou inválido.</small>
+                    <small class="p-error" *ngIf="submitted && (!pet.idade || pet.idade < 0)">Campo Idade não preenchido
+                        ou inválido.</small>
                 </div>
 
                 <!-- Data de Nascimento -->
                 <div class="field">
                     <label for="dataNascimento">Data de Nascimento</label>
-                    <p-calendar id="dataNascimento" [(ngModel)]="pet.dataNascimento" dateFormat="dd/mm/yy" required></p-calendar>
-                    <small class="p-error" *ngIf="submitted && !pet.dataNascimento">Campo Data de Nascimento não preenchido.</small>
+                    <p-calendar 
+                        appendTo="body" 
+                        id="dataNascimento" 
+                        [(ngModel)]="pet.dataNascimento"
+                        dateFormat="dd/mm/yy" 
+                        required
+                        [locale]="ptBr">
+                    </p-calendar>
+                    <small class="p-error" *ngIf="submitted && !pet.dataNascimento">
+                        Campo Data de Nascimento não preenchido.
+                    </small>
                 </div>
 
                 <!-- Espécie -->
@@ -84,21 +104,26 @@
                     <label class="mb-3">Espécie</label>
                     <div class="formgrid grid">
                         <div class="field-radiobutton col-6">
-                            <p-radioButton id="category1" name="category" value="Cachorro" [(ngModel)]="pet.especie"></p-radioButton>
+                            <p-radioButton id="category1" name="category" value="Cachorro"
+                                [(ngModel)]="pet.especie"></p-radioButton>
                             <label for="category1">Cachorro</label>
                         </div>
                         <div class="field-radiobutton col-6">
-                            <p-radioButton id="category2" name="category" value="Gato" [(ngModel)]="pet.especie"></p-radioButton>
+                            <p-radioButton id="category2" name="category" value="Gato"
+                                [(ngModel)]="pet.especie"></p-radioButton>
                             <label for="category2">Gato</label>
                         </div>
                         <div class="field-radiobutton col-6">
-                            <p-radioButton id="category3" name="category" value="Peixes" [(ngModel)]="pet.especie"></p-radioButton>
+                            <p-radioButton id="category3" name="category" value="Peixes"
+                                [(ngModel)]="pet.especie"></p-radioButton>
                             <label for="category3">Peixes</label>
                         </div>
                         <div class="field-radiobutton col-6">
-                            <p-radioButton id="category4" name="category" value="Exóticos" [(ngModel)]="pet.especie"></p-radioButton>
+                            <p-radioButton id="category4" name="category" value="Exóticos"
+                                [(ngModel)]="pet.especie"></p-radioButton>
                             <label for="category4">Exóticos</label>
                         </div>
+                        
                     </div>
                     <small class="p-error" *ngIf="submitted && !pet.especie">Campo Espécie não preenchido.</small>
                 </div>
@@ -107,30 +132,33 @@
                 <div class="field">
                     <label for="peso">Peso (kg)</label>
                     <input type="number" pInputText id="peso" [(ngModel)]="pet.peso" required min="0" />
-                    <small class="p-error" *ngIf="submitted && (!pet.peso || pet.peso <= 0)">Campo Peso não preenchido ou inválido.</small>
+                    <small class="p-error" *ngIf="submitted && (!pet.peso || pet.peso <= 0)">Campo Peso não preenchido
+                        ou inválido.</small>
                 </div>
 
                 <!-- Sexo -->
                 <div class="field">
                     <label for="sexo">Sexo</label>
-                    <p-dropdown [(ngModel)]="pet.sexo" [options]="[{label:'Macho', value:'Macho'}, {label:'Fêmea', value:'Fêmea'}, {label:'Outro', value:'Outro'}]" placeholder="Selecione o sexo"></p-dropdown>
+                    <p-dropdown appendTo="body" [(ngModel)]="pet.sexo"
+                        [options]="[{label:'Macho', value:'Macho'}, {label:'Fêmea', value:'Fêmea'}, {label:'Outro', value:'Outro'}]"
+                        placeholder="Selecione o sexo"></p-dropdown>
                     <small class="p-error" *ngIf="submitted && !pet.sexo">Campo Sexo não preenchido.</small>
                 </div>
 
                 <!-- Cor -->
-                <div class="field">
-                    <label for="cor">Cor</label>
-                    <input type="text" pInputText id="cor" [(ngModel)]="pet.cor" required 
-                           pattern="[A-Za-zÀ-ÿ\s]*"
-                           (keypress)="allowLettersOnly($event)"/>
-                    <small class="p-error" *ngIf="submitted && !pet.cor">Campo Cor não preenchido.</small>
-                </div>
-                
+                <div class="field"> <label for="cor">Cor</label>
+                    <p-dropdown appendTo="body" [(ngModel)]="pet.cor"
+                        [options]="[ {label:'Preto', value:'Preto'}, {label:'Branco', value:'Branco'}, {label:'Marrom', value:'Marrom'}, {label:'Cinza', value:'Cinza'}, {label:'Caramelo', value:'Caramelo'}, {label:'Outro', value:'Outro'}]"
+                        placeholder="Selecione a cor"></p-dropdown>
+                        <small class="p-error" *ngIf="submitted && !pet.cor">Campo Cor não preenchido.</small> </div>
+
             </ng-template>
 
             <ng-template pTemplate="footer">
-                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePet()"></button>
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text"
+                    (click)="savePet()"></button>
             </ng-template>
         </p-dialog>
 
@@ -140,8 +168,10 @@
                 <span *ngIf="pet">Tem certeza de que deseja excluir <b>{{ pet.nome }}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePetDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deletePetDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog>
 
@@ -151,8 +181,10 @@
                 <span>Tem certeza de que deseja excluir os pets selecionados?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePetsDialog = false"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No"
+                    (click)="deletePetsDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes"
+                    (click)="confirmDeleteSelected()"></button>
             </ng-template>
         </p-dialog>
     </div>

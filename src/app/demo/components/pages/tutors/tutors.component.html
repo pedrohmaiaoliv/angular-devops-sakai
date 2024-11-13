@@ -1,11 +1,10 @@
-<!-- src/app/demo/pages/tutors/tutors.component.html -->
 <div class="grid">
     <div class="col-12">
         <div class="card">
             <p-toolbar>
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                    <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedTutors()" [disabled]="!selectedTutors || !selectedTutors.length"></button>
+                    <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                    <button pButton pRipple label="Apagar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedTutors()" [disabled]="!selectedTutors || !selectedTutors.length"></button>
                 </ng-template>
             </p-toolbar>
 
@@ -46,30 +45,6 @@
                         <input type="text" pInputText id="nome" [(ngModel)]="tutor.nome" required />
                     </div>
                     <div class="field">
-                        <label for="rua">Rua</label>
-                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" />
-                    </div>
-                    <div class="field">
-                        <label for="bairro">Bairro</label>
-                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" />
-                    </div>
-                    <div class="field">
-                        <label for="numero">Número</label>
-                        <input type="number" pInputText id="numero" [(ngModel)]="tutor.numero" />
-                    </div>
-                    <div class="field">
-                        <label for="cidade">Cidade</label>
-                        <input type="text" pInputText id="cidade" [(ngModel)]="tutor.cidade" />
-                    </div>
-                    <div class="field">
-                        <label for="cep">CEP</label>
-                        <input type="text" pInputText id="cep" [(ngModel)]="tutor.cep" />
-                    </div>
-                    <div class="field">
-                        <label for="estado">Estado</label>
-                        <input type="text" pInputText id="estado" [(ngModel)]="tutor.estado" />
-                    </div>
-                    <div class="field">
                         <label for="telefone">Telefone</label>
                         <input type="text" pInputText id="telefone" [(ngModel)]="tutor.telefone" />
                     </div>
@@ -81,16 +56,72 @@
                         <label for="sexo">Sexo</label>
                         <p-dropdown [options]="[{label:'Masculino', value:'Masculino'}, {label:'Feminino', value:'Feminino'}, {label:'Outro', value:'Outro'}]" [(ngModel)]="tutor.sexo" placeholder="Selecione o sexo"></p-dropdown>
                     </div>
+
+                    <!-- Campo para o CEP com preenchimento automático -->
+                    <div class="field">
+                        <label for="cep">CEP</label>
+                        <p-inputMask 
+                            id="cep" 
+                            mask="99999-999" 
+                            [(ngModel)]="tutor.cep" 
+                            (onBlur)="onCepBlur()" 
+                            placeholder="Digite o CEP">
+                        </p-inputMask>
+                    </div>
+
+                    <!-- Campo de seleção para Estado -->
+                    <div class="field">
+                        <label for="estado">Estado</label>
+                        <p-dropdown AppendTo="body"
+                            [options]="estados" 
+                            [(ngModel)]="selectedEstado" 
+                            optionLabel="nome" 
+                            optionValue="id"
+                            placeholder="Selecione o Estado"
+                            (onChange)="onEstadoChange($event.value)">
+                        </p-dropdown>
+                    </div>
+
+                    <!-- Campo de seleção para Município com base no Estado selecionado -->
+                    <div class="field">
+                        <label for="municipio">Município</label>
+                        <p-dropdown AppendTo="body"
+                            [options]="municipios" 
+                            [(ngModel)]="selectedMunicipio" 
+                            optionLabel="nome" 
+                            optionValue="id" 
+                            placeholder="Selecione o Município">
+                        </p-dropdown>
+                    </div>
+
+                    <!-- Campos de endereço preenchidos automaticamente -->
+                    <div class="field">
+                        <label for="rua">Rua</label>
+                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly>
+                    </div>
+                    <div class="field">
+                        <label for="bairro">Bairro</label>
+                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly>
+                    </div>
+                    <div class="field">
+                        <label for="cidade">Cidade</label>
+                        <input type="text" pInputText id="cidade" [(ngModel)]="tutor.cidade" readonly>
+                    </div>
+                    <div class="field">
+                        <label for="uf">UF</label>
+                        <input type="text" pInputText id="uf" [(ngModel)]="tutor.estado" readonly>
+                    </div>
                 </ng-template>
                 <ng-template pTemplate="footer">
                     <button pButton label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
                     <button pButton label="Save" icon="pi pi-check" class="p-button-text" (click)="saveTutor()"></button>
                 </ng-template>
             </p-dialog>
+
             <p-dialog [(visible)]="deleteTutorDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
                 <div class="flex align-items-center justify-content-center">
                     <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                    <span>Are you sure you want to delete <b>{{ tutor.nome }}</b>?</span>
+                    <span>Tem certeza que deseja apagar? <b>{{ tutor.nome }}</b>?</span>
                 </div>
                 <ng-template pTemplate="footer">
                     <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteTutorDialog = false"></button>
@@ -98,11 +129,10 @@
                 </ng-template>
             </p-dialog>
 
-            <!-- Diálogo de confirmação para deletar múltiplos tutores -->
             <p-dialog [(visible)]="deleteTutorsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
                 <div class="flex align-items-center justify-content-center">
                     <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                    <span>Are you sure you want to delete selected tutors?</span>
+                    <span>Tem certeza que deseja apagar os tutores selecionados?</span>
                 </div>
                 <ng-template pTemplate="footer">
                     <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteTutorsDialog = false"></button>

@@ -9,10 +9,10 @@ export interface Pet {
     key?: string;
     nome?: string;
     idade?: number;
-    dataNascimento?: Date | String;
+    dataNascimento?: Date | string;
     especie?: string;
     peso?: number;
-    cor?: string;
+    cor?: 'Branco' | 'Preto' | 'Marrom' | 'Cinza' | 'Caramelo' | 'Outro';
     sexo?: 'Macho' | 'Femea' | 'Outro';
 }
 
