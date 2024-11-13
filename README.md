@@ -47,10 +47,10 @@ Links Uteis:
 
 ## Github dos membros:
 
-Pedro Oliveira: github.com/pedrohmaiaoliv
-Larissa Beatriz: github.com/lariBeatriz
-Eduardo Cadiz: github.com/educadiz
-Laysa Vasconcelos: github.com/lay-vasconcelos
+- Pedro Oliveira: github.com/pedrohmaiaoliv
+- Larissa Beatriz: github.com/lariBeatriz
+- Eduardo Cadiz: github.com/educadiz
+- Laysa Vasconcelos: github.com/lay-vasconcelos
 
 ## Link Versel do projeto:
 
