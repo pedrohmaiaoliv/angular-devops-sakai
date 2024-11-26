@@ -15,7 +15,7 @@
                 </ng-template> -->
             </p-toolbar>
 
-            <p-table #dt [value]="serviceRequests" responsiveLayout="scroll" [rows]="10" [paginator]="true" [(selection)]="selectedRequests" selectionMode="multiple" dataKey="id">
+            <p-table #dt [value]="serviceRequests" responsiveLayout="scroll" [rows]="10" [paginator]="true" [(selection)]="selectedRequests" selectionMode="multiple" dataKey="key">
                 <ng-template pTemplate="header">
                     <tr>
                         <th><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
@@ -29,9 +29,9 @@
                 <ng-template pTemplate="body" let-request>
                     <tr>
                         <td><p-tableCheckbox [value]="request"></p-tableCheckbox></td>
-                        <td>{{ request.pet }}</td>
-                        <td>{{ request.tutor }}</td>
-                        <td>{{ request.service }}</td>
+                        <td>{{ request.petName }}</td>
+                        <td>{{ request.tutorName }}</td>
+                        <td>{{ request.serviceName }}</td>
                         <td>{{ request.date | date:'dd/MM/yyyy' }}</td>
                         <td>
                             <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editRequest(request)"></button>
@@ -47,17 +47,17 @@
                 <form (ngSubmit)="saveServiceRequest()" #serviceRequestForm="ngForm">
                     <div class="field">
                         <label for="pet">Pet</label>
-                        <p-dropdown [options]="pets" [(ngModel)]="serviceRequest.pet" name="pet" optionLabel="name" placeholder="Selecione o Pet" required></p-dropdown>
+                        <p-dropdown [options]="petOptions" [(ngModel)]="serviceRequest.pet" name="pet" optionLabel="label" optionValue="value" placeholder="Selecione o Pet" required></p-dropdown>
                         <small class="p-error" *ngIf="submitted && !serviceRequest.pet">Campo Pet é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="tutor">Tutor</label>
-                        <p-dropdown [options]="tutors" [(ngModel)]="serviceRequest.tutor" name="tutor" optionLabel="name" placeholder="Selecione o Tutor" required></p-dropdown>
+                        <p-dropdown [options]="tutorOptions" [(ngModel)]="serviceRequest.tutor" name="tutor" optionLabel="label" optionValue="value" placeholder="Selecione o Tutor" required></p-dropdown>
                         <small class="p-error" *ngIf="submitted && !serviceRequest.tutor">Campo Tutor é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="service">Serviço</label>
-                        <p-dropdown [options]="services" [(ngModel)]="serviceRequest.service" name="service" optionLabel="name" placeholder="Selecione o Serviço" required></p-dropdown>
+                        <p-dropdown [options]="serviceOptions" [(ngModel)]="serviceRequest.service" name="service" optionLabel="label" optionValue="value" placeholder="Selecione o Serviço" required></p-dropdown>
                         <small class="p-error" *ngIf="submitted && !serviceRequest.service">Campo Serviço é obrigatório.</small>
                     </div>
                     <div class="field">
@@ -68,8 +68,8 @@
                 </form>
             </ng-template>
             <ng-template pTemplate="footer">
-                <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text" (click)="saveServiceRequest()"></button>
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveServiceRequest()"></button>
             </ng-template>
         </p-dialog>
 
