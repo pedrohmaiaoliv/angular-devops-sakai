@@ -22,6 +22,12 @@ export class TutorService {
         );
     }
 
+    getAllTutors(): Observable<Tutor[]> {
+        return this.db.list<Tutor>(this.basePath).snapshotChanges().pipe(
+            map(changes => changes.map(c => ({ key: c.payload.key, ...c.payload.val() } as Tutor)))
+        );
+    }
+
     getTutorId(key: string): Observable<Tutor> {
         return this.db.object<Tutor>(`${this.basePath}/${key}`).valueChanges();
     }

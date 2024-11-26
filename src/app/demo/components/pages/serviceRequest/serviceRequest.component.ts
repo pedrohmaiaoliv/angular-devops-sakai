@@ -25,6 +25,9 @@ export class ServiceRequestComponent implements OnInit {
     deleteRequestDialog: boolean = false;
     deleteRequestsDialog: boolean = false;
     submitted: boolean = false;
+    petOptions: { label: string, value: string }[] = [];
+    tutorOptions: { label: string, value: string }[] = [];
+    serviceOptions: { label: string, value: string }[] = [];
 
     constructor(
         private serviceRequestService: ServiceRequestService,
@@ -42,20 +45,23 @@ export class ServiceRequestComponent implements OnInit {
     }
 
     fetchPets() {
-        this.petService.getPets().subscribe(pets => {
+        this.petService.getAllPets().subscribe(pets => {
             this.pets = pets;
+            this.petOptions = pets.map(pet => ({ label: pet.nome, value: pet.key }));
         });
     }
 
     fetchTutors() {
-        this.tutorService.getTutors().subscribe(tutors => {
+        this.tutorService.getAllTutors().subscribe(tutors => {
             this.tutors = tutors;
+            this.tutorOptions = tutors.map(tutor => ({ label: tutor.nome, value: tutor.key }));
         });
     }
 
     fetchServices() {
-        this.serviceService.getServices().subscribe(services => {
+        this.serviceService.getAllServices().subscribe(services => {
             this.services = services;
+            this.serviceOptions = services.map(service => ({ label: service.nome, value: service.key }));
         });
     }
 
@@ -78,12 +84,25 @@ export class ServiceRequestComponent implements OnInit {
             return;
         }
 
-        if (this.serviceRequest.id) {
-            this.serviceRequestService.updateServiceRequest(this.serviceRequest.id, this.serviceRequest).then(() => {
+        // Fetch the names based on the selected keys
+        const pet = this.pets.find(p => p.key === this.serviceRequest.pet);
+        const tutor = this.tutors.find(t => t.key === this.serviceRequest.tutor);
+        const service = this.services.find(s => s.key === this.serviceRequest.service);
+
+        // Include the names in the service request
+        const serviceRequestToSave = {
+            ...this.serviceRequest,
+            petName: pet ? pet.nome : '',
+            tutorName: tutor ? tutor.nome : '',
+            serviceName: service ? service.nome : ''
+        };
+
+        if (this.serviceRequest.key) {
+            this.serviceRequestService.updateServiceRequest(this.serviceRequest.key, serviceRequestToSave).then(() => {
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Solicitação de Serviço Atualizada', life: 3000 });
             });
         } else {
-            this.serviceRequestService.createServiceRequest(this.serviceRequest);
+            this.serviceRequestService.createServiceRequest(serviceRequestToSave);
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Solicitação de Serviço Criada', life: 3000 });
         }
 
@@ -98,22 +117,25 @@ export class ServiceRequestComponent implements OnInit {
 
     confirmDeleteSelected() {
         this.deleteRequestsDialog = false;
-        this.serviceRequests = this.serviceRequests.filter(val => !this.selectedRequests.includes(val));
+        this.selectedRequests.forEach(request => {
+            this.serviceRequestService.deleteServiceRequest(request.key).then(() => {
+                this.serviceRequests = this.serviceRequests.filter(val => val.key !== request.key);
+            }).catch(error => {
+                console.error('Error deleting selected service request:', error); // Log any errors
+            });
+        });
         this.selectedRequests = [];
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Solicitações de Serviço Excluídas', life: 3000 });
     }
 
     editRequest(request: ServiceRequest) {
         this.serviceRequest = { ...request };
-<<<<<<< HEAD
-=======
     
         // Converte a data para o objeto Date, se estiver como string
         if (typeof this.serviceRequest.date === 'string') {
             this.serviceRequest.date = new Date(this.serviceRequest.date);
         }
     
->>>>>>> origin/main
         this.requestDialog = true;
     }
 
@@ -124,12 +146,27 @@ export class ServiceRequestComponent implements OnInit {
 
     confirmDelete() {
         this.deleteRequestDialog = false;
-        this.serviceRequests = this.serviceRequests.filter(val => val.id !== this.serviceRequest.id);
-        this.serviceRequest = {};
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Solicitação de Serviço Excluída', life: 3000 });
+        this.serviceRequestService.deleteServiceRequest(this.serviceRequest.key).then(() => {
+            this.serviceRequests = this.serviceRequests.filter(val => val.key !== this.serviceRequest.key);
+            this.serviceRequest = {};
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Solicitação de Serviço Excluída', life: 3000 });
+        }).catch(error => {
+            console.error('Error deleting service request:', error); // Log any errors
+        });
     }
-<<<<<<< HEAD
+
+    getPetLabel(id: string): string {
+        const pet = this.petOptions.find(option => option.value === id);
+        return pet ? pet.label : '';
+    }
+
+    getTutorLabel(id: string): string {
+        const tutor = this.tutorOptions.find(option => option.value === id);
+        return tutor ? tutor.label : '';
+    }
+
+    getServiceLabel(id: string): string {
+        const service = this.serviceOptions.find(option => option.value === id);
+        return service ? service.label : '';
+    }
 }
-=======
-}
->>>>>>> origin/main

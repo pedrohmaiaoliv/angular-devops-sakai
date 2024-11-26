@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { AngularFireDatabase } from '@angular/fire/compat/database'; // Ensure the correct import path for AngularFire version 7+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ServiceRequest } from '../api/serviceRequest.model';
@@ -41,34 +41,10 @@ export class ServiceRequestService {
     }
 
     deleteServiceRequest(key: string): Promise<void> {
-        return this.db.object<ServiceRequest>(`${this.basePath}/${key}`).remove();
-    }
-
-    // New methods to fetch pets, tutors, and services
-    getPets(): Observable<any[]> {
-        return this.db.list('pets').snapshotChanges().pipe(
-            map(changes => 
-                changes.map(c => ({ key: c.payload.key, ...(c.payload.val() as object) }))
-            )
-        );
-    }
-
-    getTutors(): Observable<any[]> {
-        return this.db.list('tutors').snapshotChanges().pipe(
-            map(changes => 
-                changes.map(c => ({ key: c.payload.key, ...(c.payload.val() as object) }))
-            )
-        );
-    }
-
-    getServices(): Observable<any[]> {
-        return this.db.list('services').snapshotChanges().pipe(
-            map(changes => 
-                changes.map(c => {
-                    const val = c.payload.val();
-                    return { key: c.payload.key, ...(typeof val === 'object' && val !== null ? val : {}) };
-                })
-            )
-        );
+        return this.db.object<ServiceRequest>(`${this.basePath}/${key}`).remove().then(() => {
+            // Successfully deleted service request from Firebase
+        }).catch(error => {
+            throw error;
+        });
     }
 }
