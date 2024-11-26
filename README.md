@@ -36,8 +36,10 @@ Para instalar as dependências e configurar o ambiente, siga estas etapas:
 Este projeto segue as boas práticas de versionamento no Git, com as seguintes branches principais:
 
 - **main:** Branch de produção.
-- **staging:** Branch de teste antes do deploy para produção.
-- **develop:** Branch de desenvolvimento, onde novas funcionalidades são testadas.
+- **eduardo-dev:** Branch de desenvolviemento.
+- **larissa-dev:** Branch de desenvolviemento.
+- **laysa-dev:** Branch de desenvolviemento.
+- **pedro-dev:** Branch de desenvolviemento.
 
 O projeto está hospedado na Vercel com deploys automáticos configurados a partir da integração com o GitHub. Para visualizar o projeto online, acesse o link disponível no repositório.
 
@@ -45,10 +47,10 @@ Links Uteis:
 
 ## Github dos membros:
 
-Pedro Oliveira: github.com/pedrohmaiaoliv
-Larissa Beatriz: github.com/lariBeatriz
-Eduardo Cadiz: github.com/educadiz
-Laysa Vasconcelos: github.com/lay-vasconcelos
+- Pedro Oliveira: github.com/pedrohmaiaoliv
+- Larissa Beatriz: github.com/lariBeatriz
+- Eduardo Cadiz: github.com/educadiz
+- Laysa Vasconcelos: github.com/lay-vasconcelos
 
 ## Link Versel do projeto:
 
