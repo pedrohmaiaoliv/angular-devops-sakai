@@ -47,17 +47,17 @@
                 <form (ngSubmit)="saveServiceRequest()" #serviceRequestForm="ngForm">
                     <div class="field">
                         <label for="pet">Pet</label>
-                        <p-dropdown [options]="pets" [(ngModel)]="serviceRequest.pet" name="pet" optionLabel="name" placeholder="Selecione o Pet" required></p-dropdown>
+                        <p-dropdown [options]="pets" [(ngModel)]="serviceRequest.pet" name="pet" optionLabel="nome" placeholder="Selecione o Pet" required></p-dropdown>
                         <small class="p-error" *ngIf="submitted && !serviceRequest.pet">Campo Pet é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="tutor">Tutor</label>
-                        <p-dropdown [options]="tutors" [(ngModel)]="serviceRequest.tutor" name="tutor" optionLabel="name" placeholder="Selecione o Tutor" required></p-dropdown>
+                        <p-dropdown [options]="tutors" [(ngModel)]="serviceRequest.tutor" name="tutor" optionLabel="nome" placeholder="Selecione o Tutor" required></p-dropdown>
                         <small class="p-error" *ngIf="submitted && !serviceRequest.tutor">Campo Tutor é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="service">Serviço</label>
-                        <p-dropdown [options]="services" [(ngModel)]="serviceRequest.service" name="service" optionLabel="name" placeholder="Selecione o Serviço" required></p-dropdown>
+                        <p-dropdown [options]="services" [(ngModel)]="serviceRequest.service" name="service" optionLabel="nome" placeholder="Selecione o Serviço" required></p-dropdown>
                         <small class="p-error" *ngIf="submitted && !serviceRequest.service">Campo Serviço é obrigatório.</small>
                     </div>
                     <div class="field">
