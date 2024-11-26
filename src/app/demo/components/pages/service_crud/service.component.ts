@@ -57,7 +57,7 @@ export class ServicesComponent implements OnInit {
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Services Deleted', life: 3000 });
     this.selectedServices = [];
     this.serviceService.getServices().subscribe(data => {
-      this.services = data; // Atualizar a lista de serviços após a exclusão
+      this.services = data;
     });
   }
 
@@ -67,7 +67,7 @@ export class ServicesComponent implements OnInit {
       this.serviceService.deleteService(this.service.key).then(() => {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service Deleted', life: 3000 });
         this.serviceService.getServices().subscribe(data => {
-          this.services = data; // Atualizar a lista de serviços após a exclusão
+          this.services = data;
         });
       }).catch(error => {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to delete service', life: 3000 });
@@ -83,28 +83,46 @@ export class ServicesComponent implements OnInit {
 
   saveService() {
     this.submitted = true;
-    if (this.service.nome?.trim()) {
-      if (this.service.key) {
-        this.serviceService.updateService(this.service.key, this.service).then(() => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service Updated', life: 3000 });
-          this.serviceService.getServices().subscribe(data => {
-            this.services = data; // Atualizar a lista de serviços após a atualização
-          });
-        }).catch(error => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update service', life: 3000 });
-        });
-      } else {
-        this.serviceService.createService(this.service).then(() => {
-          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service Created', life: 3000 });
-          this.serviceService.getServices().subscribe(data => {
-            this.services = data; // Atualizar a lista de serviços após a criação
-          });
-        }).catch(error => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create service', life: 3000 });
-        });
-      }
-      this.serviceDialog = false;
-      this.service = {};
+
+    // Validação dos campos obrigatórios
+    if (!this.service.nome?.trim()) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campo Nome é obrigatório.', life: 3000 });
+      return;
     }
+    if (!this.service.descricao?.trim()) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campo Descrição é obrigatório.', life: 3000 });
+      return;
+    }
+    if (!this.service.preco || this.service.preco <= 0) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campo Preço é obrigatório e deve ser maior que zero.', life: 3000 });
+      return;
+    }
+    if (!this.service.duracao || this.service.duracao <= 0) {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Campo Duração é obrigatório e deve ser maior que zero.', life: 3000 });
+      return;
+    }
+
+    if (this.service.key) {
+      this.serviceService.updateService(this.service.key, this.service).then(() => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service Updated', life: 3000 });
+        this.serviceService.getServices().subscribe(data => {
+          this.services = data;
+        });
+      }).catch(error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update service', life: 3000 });
+      });
+    } else {
+      this.serviceService.createService(this.service).then(() => {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Service Created', life: 3000 });
+        this.serviceService.getServices().subscribe(data => {
+          this.services = data;
+        });
+      }).catch(error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to create service', life: 3000 });
+      });
+    }
+
+    this.serviceDialog = false;
+    this.service = {};
   }
 }

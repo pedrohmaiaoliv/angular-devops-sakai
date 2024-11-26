@@ -5,14 +5,14 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedRequests()" [disabled]="!selectedRequests || !selectedRequests.length"></button>
+                        <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Apagar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedRequests()" [disabled]="!selectedRequests || !selectedRequests.length"></button>
                     </div>
                 </ng-template>
-                <ng-template pTemplate="right">
+                <!-- <ng-template pTemplate="right">
                     <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
-                </ng-template>
+                </ng-template> -->
             </p-toolbar>
 
             <p-table #dt [value]="serviceRequests" responsiveLayout="scroll" [rows]="10" [paginator]="true" [(selection)]="selectedRequests" selectionMode="multiple" dataKey="id">
@@ -47,22 +47,38 @@
                 <form (ngSubmit)="saveServiceRequest()" #serviceRequestForm="ngForm">
                     <div class="field">
                         <label for="pet">Pet</label>
+<<<<<<< HEAD
                         <p-dropdown [options]="pets" [(ngModel)]="serviceRequest.pet" name="pet" optionLabel="nome" placeholder="Selecione o Pet" required></p-dropdown>
+=======
+                        <p-dropdown [options]="pets" [(ngModel)]="serviceRequest.pet" name="pet" optionLabel="name" placeholder="Selecione o Pet" required></p-dropdown>
+>>>>>>> origin/main
                         <small class="p-error" *ngIf="submitted && !serviceRequest.pet">Campo Pet é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="tutor">Tutor</label>
+<<<<<<< HEAD
                         <p-dropdown [options]="tutors" [(ngModel)]="serviceRequest.tutor" name="tutor" optionLabel="nome" placeholder="Selecione o Tutor" required></p-dropdown>
+=======
+                        <p-dropdown [options]="tutors" [(ngModel)]="serviceRequest.tutor" name="tutor" optionLabel="name" placeholder="Selecione o Tutor" required></p-dropdown>
+>>>>>>> origin/main
                         <small class="p-error" *ngIf="submitted && !serviceRequest.tutor">Campo Tutor é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="service">Serviço</label>
+<<<<<<< HEAD
                         <p-dropdown [options]="services" [(ngModel)]="serviceRequest.service" name="service" optionLabel="nome" placeholder="Selecione o Serviço" required></p-dropdown>
+=======
+                        <p-dropdown [options]="services" [(ngModel)]="serviceRequest.service" name="service" optionLabel="name" placeholder="Selecione o Serviço" required></p-dropdown>
+>>>>>>> origin/main
                         <small class="p-error" *ngIf="submitted && !serviceRequest.service">Campo Serviço é obrigatório.</small>
                     </div>
                     <div class="field">
                         <label for="date">Data da Solicitação</label>
+<<<<<<< HEAD
                         <p-calendar [(ngModel)]="serviceRequest.date" name="date" dateFormat="dd/mm/yy" required></p-calendar>
+=======
+                        <p-calendar [(ngModel)]="serviceRequest.date" name="date" dateFormat="dd/mm/yy" [locale]="ptBr" appendTo="body"  required></p-calendar>
+>>>>>>> origin/main
                         <small class="p-error" *ngIf="submitted && !serviceRequest.date">Campo Data da Solicitação é obrigatório.</small>
                     </div>
                 </form>
@@ -95,4 +111,8 @@
             </ng-template>
         </p-dialog>
     </div>
+<<<<<<< HEAD
 </div>
+=======
+</div>
+>>>>>>> origin/main

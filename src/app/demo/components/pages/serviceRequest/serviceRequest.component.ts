@@ -105,6 +105,15 @@ export class ServiceRequestComponent implements OnInit {
 
     editRequest(request: ServiceRequest) {
         this.serviceRequest = { ...request };
+<<<<<<< HEAD
+=======
+    
+        // Converte a data para o objeto Date, se estiver como string
+        if (typeof this.serviceRequest.date === 'string') {
+            this.serviceRequest.date = new Date(this.serviceRequest.date);
+        }
+    
+>>>>>>> origin/main
         this.requestDialog = true;
     }
 
@@ -119,4 +128,8 @@ export class ServiceRequestComponent implements OnInit {
         this.serviceRequest = {};
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Solicitação de Serviço Excluída', life: 3000 });
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/main

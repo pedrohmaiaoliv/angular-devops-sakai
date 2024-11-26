@@ -17,6 +17,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { InputMaskModule } from 'primeng/inputmask';
 
 @NgModule({
     imports: [
@@ -29,6 +30,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
         ButtonModule,
         NgxMaskDirective,
         RippleModule,
+        InputMaskModule,
         ToastModule,
         ToolbarModule,
         RatingModule,
