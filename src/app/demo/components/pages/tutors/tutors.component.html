@@ -1,4 +1,4 @@
-<p-toast></p-toast> <!-- Adicionado o Toast no início para exibir mensagens -->
+<p-toast></p-toast> <!-- Adicionado o Toast para exibir mensagens -->
 
 <div class="grid">
     <div class="col-12">
@@ -6,13 +6,34 @@
             <!-- Barra de ferramentas com botões Novo e Apagar -->
             <p-toolbar>
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                    <button pButton pRipple label="Apagar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedTutors()" [disabled]="!selectedTutors || !selectedTutors.length"></button>
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Novo" 
+                        icon="pi pi-plus" 
+                        class="p-button-success mr-2" 
+                        (click)="openNew()">
+                    </button>
+                    <button 
+                        pButton 
+                        pRipple 
+                        label="Apagar" 
+                        icon="pi pi-trash" 
+                        class="p-button-danger" 
+                        (click)="deleteSelectedTutors()" 
+                        [disabled]="!selectedTutors || !selectedTutors.length">
+                    </button>
                 </ng-template>
             </p-toolbar>
 
             <!-- Tabela de tutores -->
-            <p-table [value]="tutors" [paginator]="true" [rows]="10" [rowsPerPageOptions]="rowsPerPageOptions" [selection]="selectedTutors" (selectionChange)="selectedTutors = $event">
+            <p-table 
+                [value]="tutors" 
+                [paginator]="true" 
+                [rows]="10" 
+                [rowsPerPageOptions]="rowsPerPageOptions" 
+                [selection]="selectedTutors" 
+                (selectionChange)="selectedTutors = $event">
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
@@ -23,6 +44,7 @@
                         <th pSortableColumn="cidade">Cidade <p-sortIcon field="cidade"></p-sortIcon></th>
                         <th pSortableColumn="estado">Estado <p-sortIcon field="estado"></p-sortIcon></th>
                         <th pSortableColumn="sexo">Sexo <p-sortIcon field="sexo"></p-sortIcon></th>
+                        <th>Key</th> <!-- Mostrando o key para depuração -->
                         <th>Ações</th>
                     </tr>
                 </ng-template>
@@ -34,16 +56,32 @@
                         <td>{{ tutor.cidade }}</td>
                         <td>{{ tutor.estado }}</td>
                         <td>{{ tutor.sexo }}</td>
+                        <td>{{ tutor.key }}</td> <!-- Exibindo o key -->
                         <td>
-                            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editTutor(tutor)"></button>
-                            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteTutor(tutor)"></button>
+                            <button 
+                                pButton 
+                                icon="pi pi-pencil" 
+                                class="p-button-rounded p-button-success mr-2" 
+                                (click)="editTutor(tutor)">
+                            </button>
+                            <button 
+                                pButton 
+                                icon="pi pi-trash" 
+                                class="p-button-rounded p-button-warning" 
+                                (click)="deleteTutor(tutor)">
+                            </button>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
 
             <!-- Diálogo de detalhes do tutor -->
-            <p-dialog [(visible)]="tutorDialog" [style]="{width: '450px'}" header="Detalhes do Tutor" [modal]="true" class="p-fluid">
+            <p-dialog 
+                [(visible)]="tutorDialog" 
+                [style]="{width: '450px'}" 
+                header="Detalhes do Tutor" 
+                [modal]="true" 
+                class="p-fluid">
                 <ng-template pTemplate="content">
                     <div class="field">
                         <label for="nome">Nome</label>
@@ -56,7 +94,7 @@
                             id="telefone" 
                             mask="(99) 99999-9999" 
                             [(ngModel)]="tutor.telefone" 
-                            placeholder="(99) 99999-9999"
+                            placeholder="(99) 99999-9999" 
                             required>
                         </p-inputMask>
                         <small class="p-error" *ngIf="submitted && !tutor.telefone">Campo Telefone é obrigatório.</small>
@@ -68,7 +106,12 @@
                     </div>
                     <div class="field">
                         <label for="sexo">Sexo</label>
-                        <p-dropdown [options]="[{label:'Masculino', value:'Masculino'}, {label:'Feminino', value:'Feminino'}, {label:'Outro', value:'Outro'}]" [(ngModel)]="tutor.sexo" placeholder="Selecione o sexo" required></p-dropdown>
+                        <p-dropdown 
+                            [options]="[{label:'Masculino', value:'Masculino'}, {label:'Feminino', value:'Feminino'}, {label:'Outro', value:'Outro'}]" 
+                            [(ngModel)]="tutor.sexo" 
+                            placeholder="Selecione o sexo" 
+                            required>
+                        </p-dropdown>
                         <small class="p-error" *ngIf="submitted && !tutor.sexo">Campo Sexo é obrigatório.</small>
                     </div>
 
@@ -80,7 +123,7 @@
                             mask="99999-999" 
                             [(ngModel)]="tutor.cep" 
                             (onBlur)="onCepBlur()" 
-                            placeholder="Digite o CEP"
+                            placeholder="Digite o CEP" 
                             required>
                         </p-inputMask>
                         <small class="p-error" *ngIf="submitted && !tutor.cep">Campo CEP é obrigatório.</small>
@@ -93,15 +136,15 @@
                             [options]="estados" 
                             [(ngModel)]="selectedEstado" 
                             optionLabel="nome" 
-                            optionValue="id"
-                            placeholder="Selecione o Estado"
-                            (onChange)="onEstadoChange($event.value)"
+                            optionValue="id" 
+                            placeholder="Selecione o Estado" 
+                            (onChange)="onEstadoChange($event.value)" 
                             required>
                         </p-dropdown>
                         <small class="p-error" *ngIf="submitted && !selectedEstado">Campo Estado é obrigatório.</small>
                     </div>
 
-                    <!-- Campo de seleção para Município com base no Estado selecionado -->
+                    <!-- Campo de seleção para Município -->
                     <div class="field">
                         <label for="municipio">Município</label>
                         <p-dropdown 
@@ -109,7 +152,7 @@
                             [(ngModel)]="selectedMunicipio" 
                             optionLabel="nome" 
                             optionValue="id" 
-                            placeholder="Selecione o Município"
+                            placeholder="Selecione o Município" 
                             required>
                         </p-dropdown>
                         <small class="p-error" *ngIf="submitted && !selectedMunicipio">Campo Município é obrigatório.</small>
@@ -118,17 +161,28 @@
                     <!-- Campos de endereço preenchidos automaticamente -->
                     <div class="field">
                         <label for="rua">Rua</label>
-                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly>
+                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly />
                     </div>
                     <div class="field">
                         <label for="bairro">Bairro</label>
-                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly>
+                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly />
                     </div>
-                   
                 </ng-template>
                 <ng-template pTemplate="footer">
-                    <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-                    <button pButton label="Salvar" icon="pi pi-check" class="p-button-text" (click)="saveTutor()"></button>
+                    <button 
+                        pButton 
+                        label="Cancelar" 
+                        icon="pi pi-times" 
+                        class="p-button-text" 
+                        (click)="hideDialog()">
+                    </button>
+                    <button 
+                        pButton 
+                        label="Salvar" 
+                        icon="pi pi-check" 
+                        class="p-button-text" 
+                        (click)="saveTutor()">
+                    </button>
                 </ng-template>
             </p-dialog>
         </div>

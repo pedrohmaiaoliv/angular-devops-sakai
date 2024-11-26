@@ -7,8 +7,25 @@
       <!-- Barra de ferramentas -->
       <p-toolbar>
         <ng-template pTemplate="left">
-          <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-          <button pButton pRipple label="Apagar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedServices()" [disabled]="!selectedServices || !selectedServices.length"></button>
+          <button 
+            pButton 
+            pRipple 
+            label="Novo" 
+            icon="pi pi-plus" 
+            class="p-button-success mr-2" 
+            style="border-radius: 0.5rem;" 
+            (click)="openNew()">
+          </button>
+          <button 
+            pButton 
+            pRipple 
+            label="Apagar" 
+            icon="pi pi-trash" 
+            class="p-button-danger" 
+            style="border-radius: 0.5rem;" 
+            (click)="deleteSelectedServices()" 
+            [disabled]="!selectedServices || !selectedServices.length">
+          </button>
         </ng-template>
       </p-toolbar>
 
@@ -34,8 +51,20 @@
             <td>{{ service.preco | currency: 'BRL' }}</td>
             <td>{{ service.duracao }} min</td>
             <td>
-              <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editService(service)"></button>
-              <button pButton icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteService(service)"></button>
+              <button 
+                pButton 
+                icon="pi pi-pencil" 
+                class="p-button-rounded p-button-success mr-2" 
+                style="width: 2.5rem; height: 2.5rem;" 
+                (click)="editService(service)">
+              </button>
+              <button 
+                pButton 
+                icon="pi pi-trash" 
+                class="p-button-rounded p-button-warning" 
+                style="width: 2.5rem; height: 2.5rem;" 
+                (click)="deleteService(service)">
+              </button>
             </td>
           </tr>
         </ng-template>
@@ -46,36 +75,48 @@
         <ng-template pTemplate="content">
           <div class="field">
             <label for="nome">Nome do Serviço</label>
-            <input type="text" pInputText id="nome" [(ngModel)]="service.nome" required />
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <i class="pi pi-tag" style="font-size: 1.2rem; color: #6c757d;"></i>
+              <input type="text" pInputText id="nome" [(ngModel)]="service.nome" placeholder="Digite o Nome do Serviço" required />
+            </div>
             <small class="p-error" *ngIf="submitted && !service.nome">Campo Nome do Serviço é obrigatório.</small>
           </div>
           <div class="field">
             <label for="descricao">Descrição</label>
-            <textarea pInputTextarea id="descricao" [(ngModel)]="service.descricao" required></textarea>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <i class="pi pi-align-left" style="font-size: 1.2rem; color: #6c757d;"></i>
+              <textarea pInputTextarea id="descricao" [(ngModel)]="service.descricao" placeholder="Digite a Descrição" required></textarea>
+            </div>
             <small class="p-error" *ngIf="submitted && !service.descricao">Campo Descrição é obrigatório.</small>
           </div>
           <div class="field">
             <label for="preco">Preço</label>
-            <p-inputNumber 
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <i class="pi pi-dollar" style="font-size: 1.2rem; color: #6c757d;"></i>
+              <p-inputNumber 
                 id="preco" 
                 mode="currency" 
                 currency="BRL" 
                 locale="pt-BR" 
                 [(ngModel)]="service.preco" 
-                placeholder="R$ 0,00" 
+                placeholder="Digite o Preço" 
                 required>
-            </p-inputNumber>
+              </p-inputNumber>
+            </div>
             <small class="p-error" *ngIf="submitted && !service.preco">Campo Preço é obrigatório.</small>
           </div>
           <div class="field">
             <label for="duracao">Duração (min)</label>
-            <p-inputNumber 
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <i class="pi pi-clock" style="font-size: 1.2rem; color: #6c757d;"></i>
+              <p-inputNumber 
                 id="duracao" 
                 [(ngModel)]="service.duracao" 
                 suffix=" min" 
-                placeholder="Ex: 60 min" 
+                placeholder="Digite a Duração (min)" 
                 required>
-            </p-inputNumber>
+              </p-inputNumber>
+            </div>
             <small class="p-error" *ngIf="submitted && !service.duracao">Campo Duração é obrigatório.</small>
           </div>
         </ng-template>
@@ -86,9 +127,9 @@
       </p-dialog>
 
       <!-- Diálogo de confirmação para deletar um único serviço -->
-      <p-dialog [(visible)]="deleteServiceDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <p-dialog [(visible)]="deleteServiceDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
           <div class="flex align-items-center justify-content-center">
-              <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+              <i class="pi pi-exclamation-circle mr-3" style="font-size: 2rem; color: #ff9800;"></i>
               <span>Tem certeza que deseja apagar? <b>{{ service.nome }}</b>?</span>
           </div>
           <ng-template pTemplate="footer">
@@ -98,9 +139,9 @@
       </p-dialog>
 
       <!-- Diálogo de confirmação para deletar múltiplos serviços -->
-      <p-dialog [(visible)]="deleteServicesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+      <p-dialog [(visible)]="deleteServicesDialog" header="Confirmar" [modal]="true" [style]="{width:'450px'}">
           <div class="flex align-items-center justify-content-center">
-              <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+              <i class="pi pi-exclamation-circle mr-3" style="font-size: 2rem; color: #ff9800;"></i>
               <span>Tem certeza que quer apagar os serviços selecionados?</span>
           </div>
           <ng-template pTemplate="footer">
@@ -108,7 +149,6 @@
               <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Sim" (click)="confirmDeleteSelectedServices()"></button>
           </ng-template>
       </p-dialog>
-
     </div>
   </div>
 </div>

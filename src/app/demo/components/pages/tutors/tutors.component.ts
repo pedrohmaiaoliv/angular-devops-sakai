@@ -6,30 +6,24 @@ import { LocationService } from '../../../service/location.service';
 
 @Component({
     templateUrl: './tutors.component.html',
-    providers: [MessageService]
+    providers: [MessageService],
 })
 export class TutorsComponent implements OnInit {
-    tutorDialog: boolean = false;
-    deleteTutorDialog: boolean = false;
-    deleteTutorsDialog: boolean = false;
+    tutorDialog = false;
+    deleteTutorDialog = false;
+    deleteTutorsDialog = false;
 
     tutors: Tutor[] = [];
     tutor: Tutor = {};
     selectedTutors: Tutor[] = [];
-    submitted: boolean = false;
-    rowsPerPageOptions = [5, 10, 20];
+    submitted = false;
 
+    rowsPerPageOptions = [5, 10, 20];
     estados: any[] = [];
     municipios: any[] = [];
-    selectedEstado: string = '';
-    selectedMunicipio: string = '';
-    cep: string = '';
-    endereco: any = {
-        logradouro: '',
-        bairro: '',
-        localidade: '',
-        uf: ''
-    };
+    selectedEstado = '';
+    selectedMunicipio = '';
+    cep = '';
 
     constructor(
         private tutorService: TutorService,
@@ -38,61 +32,33 @@ export class TutorsComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.tutorService.getTutors().subscribe(data => this.tutors = data);
-        this.loadEstados();  // Carrega os estados ao iniciar o componente
+        this.loadTutors();
+        this.loadEstados();
     }
 
-    loadEstados() {
+    private loadTutors() {
+        this.tutorService.getTutors().subscribe((data) => {
+            this.tutors = data;
+        });
+    }
+
+    private loadEstados() {
         this.locationService.getEstados().subscribe((data) => {
             this.estados = data;
         });
     }
 
-    onEstadoChange(estadoId: string) {
+    private loadMunicipios(estadoId: string, cidadeNome?: string) {
         this.locationService.getMunicipios(estadoId).subscribe((data) => {
             this.municipios = data;
-            this.selectedMunicipio = ''; // Limpa o município selecionado quando o estado muda
-        });
-    }
-
-    onCepBlur() {
-        const cepSemMascara = this.tutor.cep.replace('-', '');
-    
-        if (cepSemMascara && cepSemMascara.length === 8) {
-            this.locationService.getEnderecoByCep(cepSemMascara).subscribe(
-                (data) => {
-                    if (!data.erro) {
-                        this.tutor.rua = data.logradouro;
-                        this.tutor.bairro = data.bairro;
-    
-                        const uf = data.uf;
-                        this.tutor.estado = uf;
-                        this.selectedEstado = this.estados.find(estado => estado.sigla === uf)?.id || '';
-    
-                        if (this.selectedEstado) {
-                            this.loadMunicipios(this.selectedEstado, data.localidade);
-                        }
-                    } else {
-                        this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CEP não encontrado', life: 3000 });
-                    }
-                },
-                (error) => {
-                    this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao consultar o CEP', life: 3000 });
+            if (cidadeNome) {
+                const municipioEncontrado = this.municipios.find(
+                    (municipio) => municipio.nome.toLowerCase() === cidadeNome.toLowerCase()
+                );
+                if (municipioEncontrado) {
+                    this.selectedMunicipio = municipioEncontrado.id;
+                    this.tutor.cidade = municipioEncontrado.nome;
                 }
-            );
-        } else {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CEP inválido', life: 3000 });
-        }
-    }
-
-    loadMunicipios(estadoId: string, cidadeNome: string) {
-        this.locationService.getMunicipios(estadoId).subscribe((data) => {
-            this.municipios = data;
-    
-            const municipioEncontrado = this.municipios.find(municipio => municipio.nome.toLowerCase() === cidadeNome.toLowerCase());
-            if (municipioEncontrado) {
-                this.selectedMunicipio = municipioEncontrado.id;
-                this.tutor.cidade = municipioEncontrado.nome;
             }
         });
     }
@@ -103,78 +69,179 @@ export class TutorsComponent implements OnInit {
         this.tutorDialog = true;
     }
 
-    deleteSelectedTutors() {
-        this.deleteTutorsDialog = true;
-    }
-
     editTutor(tutor: Tutor) {
         this.tutor = { ...tutor };
-        
         if (this.tutor.cep) {
             this.onCepBlur();
-        } else {
-            if (this.tutor.estado) {
-                this.selectedEstado = this.estados.find(estado => estado.sigla === this.tutor.estado)?.id || '';
-                if (this.selectedEstado) {
-                    this.loadMunicipios(this.selectedEstado, this.tutor.cidade);
-                }
+        } else if (this.tutor.estado) {
+            this.selectedEstado = this.estados.find((estado) => estado.sigla === this.tutor.estado)?.id || '';
+            if (this.selectedEstado) {
+                this.loadMunicipios(this.selectedEstado, this.tutor.cidade);
             }
         }
-    
         this.tutorDialog = true;
     }
 
     deleteTutor(tutor: Tutor) {
-        this.deleteTutorDialog = true;
         this.tutor = { ...tutor };
+        this.deleteTutorDialog = true;
     }
 
-    confirmDeleteSelected() {
-        this.deleteTutorsDialog = false;
-        this.selectedTutors.forEach(selectedTutor => {
-            if (selectedTutor.key) {
-                this.tutorService.deleteTutor(selectedTutor.key);
-            }
-        });
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutors Deleted', life: 3000 });
-        this.selectedTutors = [];
+    deleteSelectedTutors() {
+        this.deleteTutorsDialog = true;
     }
 
     confirmDelete() {
         this.deleteTutorDialog = false;
         if (this.tutor.key) {
-            this.tutorService.deleteTutor(this.tutor.key);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutor Deleted', life: 3000 });
+            this.tutorService.deleteTutor(this.tutor.key).then(() => {
+                this.tutors = this.tutors.filter((t) => t.key !== this.tutor.key);
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: 'Tutor apagado com sucesso',
+                    life: 3000,
+                });
+            }).catch((error) => {
+                this.handleError('Erro ao apagar tutor.', error);
+            });
         }
         this.tutor = {};
     }
 
-    hideDialog() {
-        this.tutorDialog = false;
-        this.submitted = false;
+    confirmDeleteSelected() {
+        this.deleteTutorsDialog = false;
+
+        const promises = this.selectedTutors.map((tutor) => this.tutorService.deleteTutor(tutor.key || ''));
+
+        Promise.all(promises)
+            .then(() => {
+                this.tutors = this.tutors.filter((tutor) => !this.selectedTutors.includes(tutor));
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: 'Tutores apagados com sucesso',
+                    life: 3000,
+                });
+                this.selectedTutors = [];
+            })
+            .catch((error) => {
+                this.handleError('Erro ao apagar tutores.', error);
+            });
     }
 
     saveTutor() {
         this.submitted = true;
 
-        // Validação dos campos obrigatórios
-        if (!this.tutor.nome || !this.tutor.telefone || !this.tutor.cpf || !this.tutor.sexo || !this.tutor.cep || !this.selectedEstado || !this.selectedMunicipio) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.', life: 3000 });
+        if (!this.isFormValid()) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Preencha todos os campos obrigatórios.',
+                life: 3000,
+            });
             return;
         }
 
         if (this.tutor.key) {
-            // Atualiza tutor existente
-            this.tutorService.updateTutor(this.tutor.key, this.tutor);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutor Updated', life: 3000 });
+            this.updateTutor();
         } else {
-            // Cria novo tutor
-            this.tutorService.createTutor(this.tutor);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutor Created', life: 3000 });
+            this.createTutor();
         }
-        
+
         this.tutorDialog = false;
         this.tutor = {};
+        this.submitted = false;
+    }
+
+    private updateTutor() {
+        this.tutorService.updateTutor(this.tutor.key || '', this.tutor).then(() => {
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Tutor atualizado com sucesso.',
+                life: 3000,
+            });
+        }).catch((error) => {
+            this.handleError('Erro ao atualizar tutor.', error);
+        });
+    }
+
+    private createTutor() {
+        this.tutorService.createTutor(this.tutor).then(() => {
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Tutor criado com sucesso.',
+                life: 3000,
+            });
+        }).catch((error) => {
+            this.handleError('Erro ao criar tutor.', error);
+        });
+    }
+
+    private isFormValid(): boolean {
+        return !!(
+            this.tutor.nome &&
+            this.tutor.telefone &&
+            this.tutor.cpf &&
+            this.tutor.sexo &&
+            this.tutor.cep &&
+            this.selectedEstado &&
+            this.selectedMunicipio
+        );
+    }
+
+    private handleError(message: string, error: any) {
+        console.error(message, error);
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: message,
+            life: 3000,
+        });
+    }
+
+    onCepBlur() {
+        const cep = this.tutor.cep?.replace('-', '') || '';
+        if (cep.length !== 8) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'CEP inválido.',
+                life: 3000,
+            });
+            return;
+        }
+
+        this.locationService.getEnderecoByCep(cep).subscribe(
+            (data) => {
+                if (!data.erro) {
+                    this.tutor.rua = data.logradouro;
+                    this.tutor.bairro = data.bairro;
+                    this.selectedEstado = this.estados.find((e) => e.sigla === data.uf)?.id || '';
+                    this.tutor.estado = data.uf;
+
+                    if (this.selectedEstado) {
+                        this.loadMunicipios(this.selectedEstado, data.localidade);
+                    }
+                } else {
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erro',
+                        detail: 'CEP não encontrado.',
+                        life: 3000,
+                    });
+                }
+            },
+            (error) => {
+                this.handleError('Erro ao consultar CEP.', error);
+            }
+        );
+    }
+
+    hideDialog() {
+        this.tutorDialog = false;
         this.submitted = false;
     }
 }
