@@ -140,6 +140,7 @@ export class TutorsComponent implements OnInit {
 
     confirmDeleteSelected() {
         // Confirma exclusão em massa de tutores
+        console.log("chegou no confirm")
         this.deleteTutorsDialog = false;
         this.selectedTutors.forEach(selectedTutor => {
             if (selectedTutor.key) {
