@@ -129,6 +129,13 @@ export class TutorsComponent implements OnInit {
         // Abre o diálogo para confirmar exclusão de um tutor
         this.deleteTutorDialog = true;
         this.tutor = { ...tutor };
+    
+        // Verifica e exibe a chave do tutor
+        if (tutor.key) {
+            console.log(`Chave do tutor para exclusão: ${tutor.key}`);
+        } else {
+            console.log("Erro: A chave do tutor não está definida.");
+        }
     }
 
     confirmDeleteSelected() {
@@ -148,10 +155,14 @@ export class TutorsComponent implements OnInit {
         this.deleteTutorDialog = false;
         if (this.tutor.key) {
             this.tutorService.deleteTutor(this.tutor.key);
+            console.log(`Tutor com chave ${this.tutor.key} foi excluído.`); // Adicionado para verificar a exclusão
             this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Tutor excluído.', life: 3000 });
+        } else {
+            console.log('Nenhuma chave de tutor encontrada para exclusão.'); // Adicionado para verificar casos sem chave
         }
         this.tutor = {};
     }
+    
 
     hideDialog() {
         // Fecha o diálogo de criação/edição
