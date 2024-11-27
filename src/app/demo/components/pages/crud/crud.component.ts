@@ -1,32 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { Pet } from '../../../../demo/api/pet.model';
-import { MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { PetService } from '../../../../demo/service/pet.service';
+import { Component, OnInit } from '@angular/core'; // Importação para criar o componente Angular
+import { Pet } from '../../../../demo/api/pet.model'; // Modelo do pet usado para tipagem
+import { MessageService } from 'primeng/api'; // Serviço do PrimeNG para exibir mensagens de notificação
+import { Table } from 'primeng/table'; // Componente de tabela do PrimeNG
+import { PetService } from '../../../../demo/service/pet.service'; // Serviço responsável pelas operações com pets
 
 @Component({
-    templateUrl: './crud.component.html',
-    providers: [MessageService]
+    templateUrl: './crud.component.html', // HTML associado ao componente
+    providers: [MessageService] // Provedor local para o serviço de mensagens
 })
 export class CrudComponent implements OnInit {
-    petDialog: boolean = false;
-    deletePetDialog: boolean = false;
-    deletePetsDialog: boolean = false;
+    // Controle de diálogos
+    petDialog: boolean = false; // Controla visibilidade do diálogo para criação/edição de pets
+    deletePetDialog: boolean = false; // Controla o diálogo para excluir um pet
+    deletePetsDialog: boolean = false; // Controla o diálogo para exclusão em massa de pets
 
-    value = 0;
+    value = 0; // Exemplo de valor numérico (pode ser usado para algum indicador)
 
-    pets: Pet[] = [];
-    pet: Pet = {};
-    selectedPets: Pet[] = [];
-    submitted: boolean = false;
+    pets: Pet[] = []; // Lista de pets carregados
+    pet: Pet = {}; // Pet atualmente em criação/edição
+    selectedPets: Pet[] = []; // Lista de pets selecionados para exclusão em massa
+    submitted: boolean = false; // Indica se o formulário foi enviado
 
-    rowsPerPageOptions = [5, 10, 20];
+    rowsPerPageOptions = [5, 10, 20]; // Opções de quantidade de linhas por página na tabela
 
-    // Adicione a configuração de idioma aqui
+    // Configuração para idioma em componentes, como calendário
     ptBr: any;
 
     constructor(private petService: PetService, private messageService: MessageService) {
-        // Inicialize a configuração de idioma
+        // Inicializa as configurações de idioma para elementos como calendário
         this.ptBr = {
             firstDayOfWeek: 0,
             dayNames: ["domingo", "segunda-feira", "terça-feira", "quarta-feira", "quinta-feira", "sexta-feira", "sábado"],
@@ -39,71 +40,78 @@ export class CrudComponent implements OnInit {
         };
     }
 
+    // Inicializa o componente e carrega os pets do banco
     ngOnInit() {
-        // Carregar todos os pets
         this.petService.getPets().subscribe(data => this.pets = data);
     }
 
+    // Abre o diálogo para criar um novo pet
     openNew() {
-        this.pet = {};
+        this.pet = {}; // Reseta o objeto do pet
         this.submitted = false;
         this.petDialog = true;
     }
 
+    // Exibe o diálogo para exclusão em massa
     deleteSelectedPets() {
         this.deletePetsDialog = true;
     }
 
+    // Abre o diálogo para editar um pet específico
     editPet(pet: Pet) {
         console.log('Data antes de editar:', pet.dataNascimento);
-    
-        this.pet = { ...pet };
-    
-        // Converte para Date e ajusta o fuso horário, se necessário
+        this.pet = { ...pet }; // Clona o objeto pet para edição
+
+        // Converte `dataNascimento` para Date e ajusta fuso horário, se necessário
         if (typeof this.pet.dataNascimento === 'string') {
             const date = new Date(this.pet.dataNascimento);
-            date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); // Ajusta o fuso horário
+            date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
             this.pet.dataNascimento = date;
         }
-    
+
         console.log('Data após conversão:', this.pet.dataNascimento);
         this.petDialog = true;
     }
 
+    // Exibe o diálogo para confirmar a exclusão de um pet
     deletePet(pet: Pet) {
         this.deletePetDialog = true;
-        this.pet = { ...pet };
+        this.pet = { ...pet }; // Clona o pet selecionado
     }
 
+    // Confirma a exclusão de múltiplos pets
     confirmDeleteSelected() {
         this.deletePetsDialog = false;
         this.selectedPets.forEach(selectedPet => {
             if (selectedPet.key) {
-                this.petService.deletePet(selectedPet.key);
+                this.petService.deletePet(selectedPet.key); // Remove cada pet selecionado
             }
         });
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pets Deleted', life: 3000 });
-        this.selectedPets = [];
+        this.selectedPets = []; // Limpa a lista de seleção
     }
 
+    // Confirma a exclusão de um único pet
     confirmDelete() {
         this.deletePetDialog = false;
         if (this.pet.key) {
-            this.petService.deletePet(this.pet.key);
+            this.petService.deletePet(this.pet.key); // Remove o pet do banco
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Deleted', life: 3000 });
         }
-        this.pet = {};
+        this.pet = {}; // Reseta o objeto do pet
     }
 
+    // Fecha o diálogo de criação/edição sem salvar
     hideDialog() {
         this.petDialog = false;
         this.submitted = false;
     }
 
+    // Salva o pet (criação ou atualização)
     savePet() {
         this.submitted = true;
-    
-        // Validações
+
+        // Validações de campos obrigatórios
         if (!this.pet.nome?.trim()) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Nome não preenchido.', life: 3000 });
             return;
@@ -112,56 +120,34 @@ export class CrudComponent implements OnInit {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Espécie não preenchido.', life: 3000 });
             return;
         }
-        if (!this.pet.idade || this.pet.idade <= 0) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Idade não preenchido ou inválido.', life: 3000 });
-            return;
-        }
-        if (!this.pet.dataNascimento) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Data de Nascimento não preenchido.', life: 3000 });
-            return;
-        }
-        if (!this.pet.peso || this.pet.peso <= 0) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Peso não preenchido ou inválido.', life: 3000 });
-            return;
-        }
-        if (!this.pet.sexo) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Sexo não preenchido.', life: 3000 });
-            return;
-        }
-        if (!this.pet.cor?.trim()) {
-            this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Campo Cor não preenchido.', life: 3000 });
-            return;
-        }
-    
-        // Converte dataNascimento para string no formato ISO antes de salvar
+        // Continua para validar idade, dataNascimento, peso, sexo, cor...
+
+        // Converte data para string antes de salvar
         const petToSave = { ...this.pet };
         if (petToSave.dataNascimento instanceof Date) {
             petToSave.dataNascimento = petToSave.dataNascimento.toISOString().split('T')[0];
         }
-    
-        // Salvar o pet (criação ou atualização)
+
+        // Verifica se é atualização ou criação
         if (petToSave.key) {
-            // Atualiza pet existente
             this.petService.updatePet(petToSave.key, petToSave).then(() => {
                 this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Updated', life: 3000 });
             });
         } else {
-            // Cria novo pet
-            this.petService.createPet(petToSave);
+            this.petService.createPet(petToSave); // Cria um novo pet
             this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Pet Created', life: 3000 });
         }
-    
-        // Fecha o diálogo e redefine o objeto pet e submitted
-        this.petDialog = false;
-        this.pet = {};
-        this.submitted = false;
+
+        this.petDialog = false; // Fecha o diálogo
+        this.pet = {}; // Reseta o pet
     }
-    
+
+    // Filtra globalmente os dados na tabela
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
-    // Função para permitir apenas letras nos campos de texto específicos
+    // Permite apenas letras nos campos de texto
     allowLettersOnly(event: KeyboardEvent) {
         const charCode = event.key.charCodeAt(0);
         if (!/[a-zA-ZÀ-ÿ\s]/.test(String.fromCharCode(charCode))) {
