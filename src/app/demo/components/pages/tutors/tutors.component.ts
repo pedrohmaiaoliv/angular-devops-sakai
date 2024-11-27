@@ -1,30 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { Tutor } from '../../../api/tutors.models';
-import { MessageService } from 'primeng/api';
-import { TutorService } from '../../../service/tutors.service';
-import { LocationService } from '../../../service/location.service';
+import { Component, OnInit } from '@angular/core'; // Necessário para criar um componente Angular
+import { Tutor } from '../../../api/tutors.models'; // Modelo que define a estrutura de um tutor
+import { MessageService } from 'primeng/api'; // Serviço para exibir mensagens de notificação
+import { TutorService } from '../../../service/tutors.service'; // Serviço para gerenciar tutores no banco de dados
+import { LocationService } from '../../../service/location.service'; // Serviço para consultar estados, municípios e CEP
 
 @Component({
-    templateUrl: './tutors.component.html',
-    providers: [MessageService]
+    templateUrl: './tutors.component.html', // Template HTML associado ao componente
+    providers: [MessageService] // Fornece o MessageService localmente para este componente
 })
 export class TutorsComponent implements OnInit {
-    tutorDialog: boolean = false;
-    deleteTutorDialog: boolean = false;
-    deleteTutorsDialog: boolean = false;
+    tutorDialog: boolean = false; // Controla a exibição do diálogo de criação/edição de tutor
+    deleteTutorDialog: boolean = false; // Controla a exibição do diálogo de exclusão de um tutor
+    deleteTutorsDialog: boolean = false; // Controla a exibição do diálogo de exclusão em massa
 
-    tutors: Tutor[] = [];
-    tutor: Tutor = {};
-    selectedTutors: Tutor[] = [];
-    submitted: boolean = false;
-    rowsPerPageOptions = [5, 10, 20];
+    tutors: Tutor[] = []; // Lista de tutores carregados
+    tutor: Tutor = {}; // Objeto do tutor atualmente em edição/criação
+    selectedTutors: Tutor[] = []; // Lista de tutores selecionados para exclusão em massa
+    submitted: boolean = false; // Indica se o formulário foi submetido
+    rowsPerPageOptions = [5, 10, 20]; // Opções para quantidade de linhas por página em tabelas
 
-    estados: any[] = [];
-    municipios: any[] = [];
-    selectedEstado: string = '';
-    selectedMunicipio: string = '';
-    cep: string = '';
-    endereco: any = {
+    estados: any[] = []; // Lista de estados carregados
+    municipios: any[] = []; // Lista de municípios carregados
+    selectedEstado: string = ''; // Estado selecionado
+    selectedMunicipio: string = ''; // Município selecionado
+    cep: string = ''; // CEP para consulta de endereço
+    endereco: any = { // Objeto para armazenar o endereço retornado pelo CEP
         logradouro: '',
         bairro: '',
         localidade: '',
@@ -32,43 +32,45 @@ export class TutorsComponent implements OnInit {
     };
 
     constructor(
-        private tutorService: TutorService,
-        private messageService: MessageService,
-        private locationService: LocationService
+        private tutorService: TutorService, // Serviço para gerenciar tutores
+        private messageService: MessageService, // Serviço para exibir mensagens de notificação
+        private locationService: LocationService // Serviço para manipular dados de localização (estados, municípios, CEP)
     ) {}
 
     ngOnInit() {
+        // Inicializa o componente carregando tutores e estados
         this.tutorService.getTutors().subscribe(data => this.tutors = data);
-        this.loadEstados();  // Carrega os estados ao iniciar o componente
+        this.loadEstados();
     }
 
     loadEstados() {
+        // Carrega a lista de estados através do LocationService
         this.locationService.getEstados().subscribe((data) => {
             this.estados = data;
         });
     }
 
     onEstadoChange(estadoId: string) {
+        // Carrega os municípios com base no estado selecionado
         this.locationService.getMunicipios(estadoId).subscribe((data) => {
             this.municipios = data;
-            this.selectedMunicipio = ''; // Limpa o município selecionado quando o estado muda
+            this.selectedMunicipio = ''; // Reseta o município ao mudar o estado
         });
     }
 
     onCepBlur() {
+        // Consulta o endereço pelo CEP ao perder o foco no campo
         const cepSemMascara = this.tutor.cep.replace('-', '');
     
         if (cepSemMascara && cepSemMascara.length === 8) {
             this.locationService.getEnderecoByCep(cepSemMascara).subscribe(
                 (data) => {
                     if (!data.erro) {
+                        // Preenche os campos do tutor com os dados retornados
                         this.tutor.rua = data.logradouro;
                         this.tutor.bairro = data.bairro;
-    
-                        const uf = data.uf;
-                        this.tutor.estado = uf;
-                        this.selectedEstado = this.estados.find(estado => estado.sigla === uf)?.id || '';
-    
+                        this.tutor.estado = data.uf;
+                        this.selectedEstado = this.estados.find(estado => estado.sigla === data.uf)?.id || '';
                         if (this.selectedEstado) {
                             this.loadMunicipios(this.selectedEstado, data.localidade);
                         }
@@ -76,7 +78,7 @@ export class TutorsComponent implements OnInit {
                         this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'CEP não encontrado', life: 3000 });
                     }
                 },
-                (error) => {
+                () => {
                     this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Falha ao consultar o CEP', life: 3000 });
                 }
             );
@@ -86,9 +88,9 @@ export class TutorsComponent implements OnInit {
     }
 
     loadMunicipios(estadoId: string, cidadeNome: string) {
+        // Carrega municípios e tenta selecionar o município retornado pelo CEP
         this.locationService.getMunicipios(estadoId).subscribe((data) => {
             this.municipios = data;
-    
             const municipioEncontrado = this.municipios.find(municipio => municipio.nome.toLowerCase() === cidadeNome.toLowerCase());
             if (municipioEncontrado) {
                 this.selectedMunicipio = municipioEncontrado.id;
@@ -98,81 +100,82 @@ export class TutorsComponent implements OnInit {
     }
 
     openNew() {
+        // Abre o diálogo para criar um novo tutor
         this.tutor = {};
         this.submitted = false;
         this.tutorDialog = true;
     }
 
     deleteSelectedTutors() {
+        // Abre o diálogo para confirmar exclusão em massa
         this.deleteTutorsDialog = true;
     }
 
     editTutor(tutor: Tutor) {
+        // Abre o diálogo para editar um tutor existente
         this.tutor = { ...tutor };
-        
         if (this.tutor.cep) {
             this.onCepBlur();
-        } else {
-            if (this.tutor.estado) {
-                this.selectedEstado = this.estados.find(estado => estado.sigla === this.tutor.estado)?.id || '';
-                if (this.selectedEstado) {
-                    this.loadMunicipios(this.selectedEstado, this.tutor.cidade);
-                }
+        } else if (this.tutor.estado) {
+            this.selectedEstado = this.estados.find(estado => estado.sigla === this.tutor.estado)?.id || '';
+            if (this.selectedEstado) {
+                this.loadMunicipios(this.selectedEstado, this.tutor.cidade);
             }
         }
-    
         this.tutorDialog = true;
     }
 
     deleteTutor(tutor: Tutor) {
+        // Abre o diálogo para confirmar exclusão de um tutor
         this.deleteTutorDialog = true;
         this.tutor = { ...tutor };
     }
 
     confirmDeleteSelected() {
+        // Confirma exclusão em massa de tutores
         this.deleteTutorsDialog = false;
         this.selectedTutors.forEach(selectedTutor => {
             if (selectedTutor.key) {
                 this.tutorService.deleteTutor(selectedTutor.key);
             }
         });
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutors Deleted', life: 3000 });
+        this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Tutores excluídos.', life: 3000 });
         this.selectedTutors = [];
     }
 
     confirmDelete() {
+        // Confirma exclusão de um tutor
         this.deleteTutorDialog = false;
         if (this.tutor.key) {
             this.tutorService.deleteTutor(this.tutor.key);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutor Deleted', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Tutor excluído.', life: 3000 });
         }
         this.tutor = {};
     }
 
     hideDialog() {
+        // Fecha o diálogo de criação/edição
         this.tutorDialog = false;
         this.submitted = false;
     }
 
     saveTutor() {
+        // Salva ou atualiza um tutor
         this.submitted = true;
 
-        // Validação dos campos obrigatórios
         if (!this.tutor.nome || !this.tutor.telefone || !this.tutor.cpf || !this.tutor.sexo || !this.tutor.cep || !this.selectedEstado || !this.selectedMunicipio) {
             this.messageService.add({ severity: 'error', summary: 'Erro', detail: 'Preencha todos os campos obrigatórios.', life: 3000 });
             return;
         }
 
         if (this.tutor.key) {
-            // Atualiza tutor existente
             this.tutorService.updateTutor(this.tutor.key, this.tutor);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutor Updated', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Tutor atualizado.', life: 3000 });
         } else {
-            // Cria novo tutor
             this.tutorService.createTutor(this.tutor);
-            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Tutor Created', life: 3000 });
+            this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Tutor criado.', life: 3000 });
         }
-        
+
         this.tutorDialog = false;
         this.tutor = {};
         this.submitted = false;
