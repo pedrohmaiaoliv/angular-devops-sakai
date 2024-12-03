@@ -83,89 +83,151 @@
                 [modal]="true" 
                 class="p-fluid">
                 <ng-template pTemplate="content">
+                    <!-- Nome -->
                     <div class="field">
                         <label for="nome">Nome</label>
-                        <input type="text" pInputText id="nome" [(ngModel)]="tutor.nome" required />
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-user" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <input type="text" pInputText id="nome" [(ngModel)]="tutor.nome" required />
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !tutor.nome">Campo Nome é obrigatório.</small>
                     </div>
+
+                    <!-- Telefone -->
                     <div class="field">
                         <label for="telefone">Telefone</label>
-                        <p-inputMask 
-                            id="telefone" 
-                            mask="(99) 99999-9999" 
-                            [(ngModel)]="tutor.telefone" 
-                            placeholder="(99) 99999-9999" 
-                            required>
-                        </p-inputMask>
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-phone" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <p-inputMask 
+                                    id="telefone" 
+                                    mask="(99) 99999-9999" 
+                                    [(ngModel)]="tutor.telefone" 
+                                    placeholder="(99) 99999-9999" 
+                                    required>
+                                </p-inputMask>
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !tutor.telefone">Campo Telefone é obrigatório.</small>
                     </div>
+
+                    <!-- CPF -->
                     <div class="field">
                         <label for="cpf">CPF</label>
-                        <input type="text" pInputText id="cpf" [(ngModel)]="tutor.cpf" placeholder="000.000.000-00" mask="000.000.000-00" required />
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-id-card" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <p-inputMask 
+                                    id="cpf" 
+                                    mask="999.999.999-99" 
+                                    [(ngModel)]="tutor.cpf" 
+                                    placeholder="000.000.000-00" 
+                                    required>
+                                </p-inputMask>
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !tutor.cpf">Campo CPF é obrigatório.</small>
                     </div>
+
+                    <!-- Sexo -->
                     <div class="field">
                         <label for="sexo">Sexo</label>
-                        <p-dropdown 
-                            [options]="[{label:'Masculino', value:'Masculino'}, {label:'Feminino', value:'Feminino'}, {label:'Outro', value:'Outro'}]" 
-                            [(ngModel)]="tutor.sexo" 
-                            placeholder="Selecione o sexo" 
-                            required>
-                        </p-dropdown>
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-user" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <p-dropdown 
+                                    [options]="[{label: 'Masculino', value: 'Masculino'}, {label: 'Feminino', value: 'Feminino'}, {label: 'Outro', value: 'Outro'}]" 
+                                    [(ngModel)]="tutor.sexo" 
+                                    optionLabel="label" 
+                                    optionValue="value" 
+                                    placeholder="Selecione o sexo" 
+                                    required>
+                                </p-dropdown>
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !tutor.sexo">Campo Sexo é obrigatório.</small>
                     </div>
 
-                    <!-- Campo para o CEP com preenchimento automático -->
+                    <!-- CEP -->
                     <div class="field">
                         <label for="cep">CEP</label>
-                        <p-inputMask 
-                            id="cep" 
-                            mask="99999-999" 
-                            [(ngModel)]="tutor.cep" 
-                            (onBlur)="onCepBlur()" 
-                            placeholder="Digite o CEP" 
-                            required>
-                        </p-inputMask>
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-map-marker" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <p-inputMask 
+                                    id="cep" 
+                                    mask="99999-999" 
+                                    [(ngModel)]="tutor.cep" 
+                                    (onBlur)="onCepBlur()" 
+                                    placeholder="Digite o CEP" 
+                                    required>
+                                </p-inputMask>
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !tutor.cep">Campo CEP é obrigatório.</small>
                     </div>
 
-                    <!-- Campo de seleção para Estado -->
+                    <!-- Estado -->
                     <div class="field">
                         <label for="estado">Estado</label>
-                        <p-dropdown 
-                            [options]="estados" 
-                            [(ngModel)]="selectedEstado" 
-                            optionLabel="nome" 
-                            optionValue="id" 
-                            placeholder="Selecione o Estado" 
-                            (onChange)="onEstadoChange($event.value)" 
-                            required>
-                        </p-dropdown>
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-globe" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <p-dropdown 
+                                    [options]="estados" 
+                                    [(ngModel)]="selectedEstado" 
+                                    optionLabel="nome" 
+                                    optionValue="id" 
+                                    placeholder="Selecione o Estado" 
+                                    (onChange)="onEstadoChange($event.value)" 
+                                    required>
+                                </p-dropdown>
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !selectedEstado">Campo Estado é obrigatório.</small>
                     </div>
 
-                    <!-- Campo de seleção para Município -->
+                    <!-- Município -->
                     <div class="field">
                         <label for="municipio">Município</label>
-                        <p-dropdown 
-                            [options]="municipios" 
-                            [(ngModel)]="selectedMunicipio" 
-                            optionLabel="nome" 
-                            optionValue="id" 
-                            placeholder="Selecione o Município" 
-                            required>
-                        </p-dropdown>
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-map" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <p-dropdown 
+                                    [options]="municipios" 
+                                    [(ngModel)]="selectedMunicipio" 
+                                    optionLabel="nome" 
+                                    optionValue="id" 
+                                    placeholder="Selecione o Município" 
+                                    required>
+                                </p-dropdown>
+                            </div>
+                        </div>
                         <small class="p-error" *ngIf="submitted && !selectedMunicipio">Campo Município é obrigatório.</small>
                     </div>
 
-                    <!-- Campos de endereço preenchidos automaticamente -->
+                    <!-- Rua -->
                     <div class="field">
                         <label for="rua">Rua</label>
-                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly />
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-home" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly />
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Bairro -->
                     <div class="field">
                         <label for="bairro">Bairro</label>
-                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly />
+                        <div style="display: flex; align-items: center; width: 100%;">
+                            <i class="pi pi-building" style="margin-right: 0.5rem;"></i>
+                            <div style="flex: 1;">
+                                <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly />
+                            </div>
+                        </div>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="footer">
@@ -188,3 +250,4 @@
         </div>
     </div>
 </div>
+
