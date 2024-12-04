@@ -68,99 +68,102 @@
                     class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="pet.image">
 
                 <!-- Nome -->
-                <div class="field">
-                    <label for="nome">Nome</label>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="pi pi-user" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
-                        <input type="text" pInputText id="nome" [(ngModel)]="pet.nome" required autofocus
-                            [ngClass]="{'ng-invalid ng-dirty' : submitted && !pet.nome}" placeholder="Digite o Nome do seu Pet"/>
-                    </div>
-                    <small class="p-error" *ngIf="submitted && !pet.nome">Campo Nome não preenchido.</small>
-                </div>
+                <!-- Nome -->
+<div class="field">
+    <label for="nome">Nome</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="pi pi-user" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
+        <input type="text" pInputText id="nome" [(ngModel)]="pet.nome" required autofocus
+            [ngClass]="{'ng-invalid ng-dirty' : submitted && !pet.nome}" placeholder="Digite o Nome do seu Pet" />
+    </div>
+    <small class="p-error" *ngIf="submitted && !pet.nome">Campo Nome não preenchido.</small>
+</div>
 
-                <!-- Idade -->
-                <div class="field">
-                    <label for="idade">Idade</label>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="pi pi-calendar" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
-                        <input type="number" pInputText id="idade" [(ngModel)]="pet.idade" required min="0" max="25" placeholder="Digite a Idade de seu Pet"/>
-                    </div>
-                    <small class="p-error" *ngIf="submitted && (!pet.idade || pet.idade < 0)">Campo Idade não preenchido ou inválido.</small>
-                </div>
+<!-- Idade -->
+<div class="field">
+    <label for="idade">Idade</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="pi pi-calendar" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
+        <input type="number" pInputText id="idade" [(ngModel)]="pet.idade" required min="0" max="25"
+            placeholder="Digite a Idade de seu Pet" />
+    </div>
+    <small class="p-error" *ngIf="submitted && (!pet.idade || pet.idade < 0)">Campo Idade não preenchido ou inválido.</small>
+</div>
 
-                <!-- Data de Nascimento -->
-                <div class="field">
-                    <label for="dataNascimento">Data de Nascimento</label>
-                    <div style="display: flex; align-items: center; gap: 0.5rem;">
-                        <i class="pi pi-calendar-plus" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone -->
-                        <p-calendar 
-                            appendTo="body" 
-                            id="dataNascimento" 
-                            [(ngModel)]="pet.dataNascimento"
-                            dateFormat="dd/mm/yy" 
-                            required
-                            [locale]="ptBr"
-                            style="flex: 1;"
-                            placeholder="Selecione a Data de Nascimento"> <!-- Garante que o campo ocupe o espaço disponível -->
-                        </p-calendar>
-                    </div>
-                    <small class="p-error" *ngIf="submitted && !pet.dataNascimento">Campo Data de Nascimento não preenchido.</small>
-                </div>
-                <!-- Espécie -->
-                <div class="field">
-                    <label class="mb-3">Espécie</label>
-                    <div class="formgrid grid">
-                        <div class="field-radiobutton col-6">
-                            <p-radioButton id="category1" name="category" value="Cachorro"
-                                [(ngModel)]="pet.especie"></p-radioButton>
-                            <label for="category1">Cachorro</label>
-                        </div>
-                        <div class="field-radiobutton col-6">
-                            <p-radioButton id="category2" name="category" value="Gato"
-                                [(ngModel)]="pet.especie"></p-radioButton>
-                            <label for="category2">Gato</label>
-                        </div>
-                        <div class="field-radiobutton col-6">
-                            <p-radioButton id="category3" name="category" value="Peixes"
-                                [(ngModel)]="pet.especie"></p-radioButton>
-                            <label for="category3">Peixes</label>
-                        </div>
-                        <div class="field-radiobutton col-6">
-                            <p-radioButton id="category4" name="category" value="Exóticos"
-                                [(ngModel)]="pet.especie"></p-radioButton>
-                            <label for="category4">Exóticos</label>
-                        </div>
-                        
-                    </div>
-                    <small class="p-error" *ngIf="submitted && !pet.especie">Campo Espécie não preenchido.</small>
-                </div>
+<!-- Data de Nascimento -->
+<div class="field">
+    <label for="dataNascimento">Data de Nascimento</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="pi pi-calendar-plus" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone -->
+        <p-calendar appendTo="body" id="dataNascimento" [(ngModel)]="pet.dataNascimento" dateFormat="dd/mm/yy"
+            required [locale]="ptBr" style="flex: 1;" placeholder="Selecione a Data de Nascimento">
+        </p-calendar>
+    </div>
+    <small class="p-error" *ngIf="submitted && !pet.dataNascimento">Campo Data de Nascimento não preenchido.</small>
+</div>
 
-                <!-- Peso -->
-                <div class="field">
-                    <label for="peso">Peso (kg)</label>
-                    <div style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
-                        <i class="pi pi-tag" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone de tag -->
-                        <input type="number" pInputText id="peso" placeholder="Digite o peso" [(ngModel)]="pet.peso" 
-                            required min="0" style="flex: 1; height: 2.5rem;" /> <!-- Campo ajustado -->
-                    </div>
-                    <small class="p-error" *ngIf="submitted && (!pet.peso || pet.peso <= 0)">Campo Peso não preenchido ou inválido.</small>
-                </div>
+<!-- Espécie -->
+<div class="field">
+    <label class="mb-3">Espécie</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="pi pi-paw" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
+        <div class="formgrid grid" style="flex: 1;">
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category1" name="category" value="Cachorro" [(ngModel)]="pet.especie"></p-radioButton>
+                <label for="category1">Cachorro</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category2" name="category" value="Gato" [(ngModel)]="pet.especie"></p-radioButton>
+                <label for="category2">Gato</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category3" name="category" value="Peixes" [(ngModel)]="pet.especie"></p-radioButton>
+                <label for="category3">Peixes</label>
+            </div>
+            <div class="field-radiobutton col-6">
+                <p-radioButton id="category4" name="category" value="Exóticos" [(ngModel)]="pet.especie"></p-radioButton>
+                <label for="category4">Exóticos</label>
+            </div>
+        </div>
+    </div>
+    <small class="p-error" *ngIf="submitted && !pet.especie">Campo Espécie não preenchido.</small>
+</div>
 
-                <!-- Sexo -->
-                <div class="field">
-                    <label for="sexo">Sexo</label>
-                    <p-dropdown appendTo="body" [(ngModel)]="pet.sexo"
-                        [options]="[{label:'Macho', value:'Macho'}, {label:'Fêmea', value:'Fêmea'}, {label:'Outro', value:'Outro'}]"
-                        placeholder="Selecione o sexo"></p-dropdown>
-                    <small class="p-error" *ngIf="submitted && !pet.sexo">Campo Sexo não preenchido.</small>
-                </div>
+<!-- Peso -->
+<div class="field">
+    <label for="peso">Peso (kg)</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem; width: 100%;">
+        <i class="pi pi-tag" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone de tag -->
+        <input type="number" pInputText id="peso" placeholder="Digite o peso" [(ngModel)]="pet.peso" required min="0"
+            style="flex: 1; height: 2.5rem;" /> <!-- Campo ajustado -->
+    </div>
+    <small class="p-error" *ngIf="submitted && (!pet.peso || pet.peso <= 0)">Campo Peso não preenchido ou inválido.</small>
+</div>
 
-                <!-- Cor -->
-                <div class="field"> <label for="cor">Cor</label>
-                    <p-dropdown appendTo="body" [(ngModel)]="pet.cor"
-                        [options]="[ {label:'Preto', value:'Preto'}, {label:'Branco', value:'Branco'}, {label:'Marrom', value:'Marrom'}, {label:'Cinza', value:'Cinza'}, {label:'Caramelo', value:'Caramelo'}, {label:'Outro', value:'Outro'}]"
-                        placeholder="Selecione a cor"></p-dropdown>
-                        <small class="p-error" *ngIf="submitted && !pet.cor">Campo Cor não preenchido.</small> </div>
+<!-- Sexo -->
+<div class="field">
+    <label for="sexo">Sexo</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="pi pi-users" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
+        <div style="flex: 1;"><p-dropdown appendTo="body" [(ngModel)]="pet.sexo"
+            [options]="[{label:'Macho', value:'Macho'}, {label:'Fêmea', value:'Fêmea'}, {label:'Outro', value:'Outro'}]"
+            placeholder="Selecione o Sexo"></p-dropdown></div>
+    </div>
+    <small class="p-error" *ngIf="submitted && !pet.sexo">Campo Sexo não preenchido.</small>
+</div>
+
+<!-- Cor -->
+<div class="field">
+    <label for="cor">Cor</label>
+    <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <i class="pi pi-palette" style="font-size: 1.2rem; color: #6c757d;"></i> <!-- Ícone adicionado -->
+        <div style="flex: 1;"><p-dropdown appendTo="body" [(ngModel)]="pet.cor"
+            [options]="[{label:'Preto', value:'Preto'}, {label:'Branco', value:'Branco'}, {label:'Marrom', value:'Marrom'}, {label:'Cinza', value:'Cinza'}, {label:'Caramelo', value:'Caramelo'}, {label:'Outro', value:'Outro'}]"
+            placeholder="Selecione a Cor"></p-dropdown></div>
+    </div>
+    <small class="p-error" *ngIf="submitted && !pet.cor">Campo Cor não preenchido.</small>
+</div>
+
 
 
 
