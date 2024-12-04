@@ -75,7 +75,7 @@
                 </ng-template>
             </p-table>
 
-            <!-- Diálogo de detalhes do tutor -->
+            <!-- Diálogo de criação/edição de tutor -->
             <p-dialog 
                 [(visible)]="tutorDialog" 
                 [style]="{width: '450px'}" 
@@ -169,7 +169,7 @@
                         <small class="p-error" *ngIf="submitted && !tutor.cep">Campo CEP é obrigatório.</small>
                     </div>
 
-                    <!-- Estado -->
+                    <!-- Campo de seleção para Estado -->
                     <div class="field">
                         <label for="estado">Estado</label>
                         <div style="display: flex; align-items: center; width: 100%;">
@@ -189,7 +189,7 @@
                         <small class="p-error" *ngIf="submitted && !selectedEstado">Campo Estado é obrigatório.</small>
                     </div>
 
-                    <!-- Município -->
+                    <!-- Campo de seleção para Município -->
                     <div class="field">
                         <label for="municipio">Município</label>
                         <div style="display: flex; align-items: center; width: 100%;">
@@ -208,26 +208,14 @@
                         <small class="p-error" *ngIf="submitted && !selectedMunicipio">Campo Município é obrigatório.</small>
                     </div>
 
-                    <!-- Rua -->
+                    <!-- Campos de endereço preenchidos automaticamente -->
                     <div class="field">
                         <label for="rua">Rua</label>
-                        <div style="display: flex; align-items: center; width: 100%;">
-                            <i class="pi pi-home" style="margin-right: 0.5rem;"></i>
-                            <div style="flex: 1;">
-                                <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly />
-                            </div>
-                        </div>
+                        <input type="text" pInputText id="rua" [(ngModel)]="tutor.rua" readonly />
                     </div>
-
-                    <!-- Bairro -->
                     <div class="field">
                         <label for="bairro">Bairro</label>
-                        <div style="display: flex; align-items: center; width: 100%;">
-                            <i class="pi pi-building" style="margin-right: 0.5rem;"></i>
-                            <div style="flex: 1;">
-                                <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly />
-                            </div>
-                        </div>
+                        <input type="text" pInputText id="bairro" [(ngModel)]="tutor.bairro" readonly />
                     </div>
                 </ng-template>
                 <ng-template pTemplate="footer">
@@ -244,6 +232,54 @@
                         icon="pi pi-check" 
                         class="p-button-text" 
                         (click)="saveTutor()">
+                    </button>
+                </ng-template>
+            </p-dialog>
+
+            <!-- Diálogo de confirmação de exclusão de um tutor -->
+            <p-dialog [(visible)]="deleteTutorDialog" header="Confirmação" [modal]="true" [style]="{width: '450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>Tem certeza de que deseja excluir o tutor <b>{{ tutor.nome }}</b>?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button 
+                        pButton 
+                        label="Não" 
+                        icon="pi pi-times" 
+                        class="p-button-text" 
+                        (click)="deleteTutorDialog = false">
+                    </button>
+                    <button 
+                        pButton 
+                        label="Sim" 
+                        icon="pi pi-check" 
+                        class="p-button-text" 
+                        (click)="confirmDelete()">
+                    </button>
+                </ng-template>
+            </p-dialog>
+
+            <!-- Diálogo de confirmação de exclusão em massa -->
+            <p-dialog [(visible)]="deleteTutorsDialog" header="Confirmação" [modal]="true" [style]="{width: '450px'}">
+                <div class="flex align-items-center justify-content-center">
+                    <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                    <span>Tem certeza de que deseja excluir os tutores selecionados?</span>
+                </div>
+                <ng-template pTemplate="footer">
+                    <button 
+                        pButton 
+                        label="Não" 
+                        icon="pi pi-times" 
+                        class="p-button-text" 
+                        (click)="deleteTutorsDialog = false">
+                    </button>
+                    <button 
+                        pButton 
+                        label="Sim" 
+                        icon="pi pi-check" 
+                        class="p-button-text" 
+                        (click)="confirmDeleteSelected()">
                     </button>
                 </ng-template>
             </p-dialog>
